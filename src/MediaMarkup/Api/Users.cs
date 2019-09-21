@@ -49,7 +49,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<User> GetByEmail(string email, bool throwExceptionIfNull = false)
         {
-            var response = await ApiClient.GetAsync($"Users/GetByEmail/?email={WebUtility.UrlEncode(email)}");
+            var response = await ApiClient.GetAsync($"users/email/{WebUtility.UrlEncode(email)}");
 
             if (response.IsSuccessStatusCode)
             {
