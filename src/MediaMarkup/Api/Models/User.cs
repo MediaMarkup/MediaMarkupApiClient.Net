@@ -41,19 +41,19 @@ namespace MediaMarkup.Api.Models
         /// <summary>
         /// User Role
         /// </summary>
-        [JsonProperty("userRole")]
+        [JsonProperty("role")]
         public UserRole UserRole { get; set; }
 
         /// <summary>
         /// Web Login Enabled
         /// </summary>
-        [JsonProperty("webLoginEnabled")]
+        [JsonProperty("loginEnabled")]
         public bool WebLoginEnabled { get; set; }
 
         /// <summary>
         /// Account Owner
         /// </summary>
         [JsonProperty("accountOwner")]
-        public bool AccountOwner { get; set; }
+        public bool AccountOwner { get => UserRole == UserRole.Administrator; }
     }
 }
