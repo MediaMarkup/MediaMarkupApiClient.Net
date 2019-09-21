@@ -7,7 +7,7 @@ namespace MediaMarkup.Api.Models
         [JsonProperty("clientId")]
         public string ClientId { get; set; }
 
-        [JsonProperty("secretKey")]
+        [JsonProperty("clientSecret")]
         public string SecretKey { get; set; }
     }
 }
