@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using MediaMarkup.Api;
 using MediaMarkup.Core;
 using MediaMarkup.Api.Models;
+using Newtonsoft.Json.Linq;
 
 namespace MediaMarkup
 {
@@ -144,7 +145,7 @@ namespace MediaMarkup
             // Get new httpclient here for connection without authorization using client is and secret
             var apiClient = new HttpClient {BaseAddress = new Uri(ClientSettings.ApiBaseUrl)};
 
-            var response = await apiClient.PostAsJsonAsync($"{ClientSettings.ApiBaseUrl}Authentication/GetToken/", new AccessTokenRequestParameters
+            var response = await apiClient.PostAsJsonAsync($"{ClientSettings.ApiBaseUrl}connect/token", new AccessTokenRequestParameters
             {
                 ClientId = ClientSettings.ClientId,
                 SecretKey = ClientSettings.SecretKey
@@ -152,7 +153,8 @@ namespace MediaMarkup
 
             if (response.IsSuccessStatusCode)
             {
-                AccessToken = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync();
+                AccessToken = JObject.Parse(responseContent)["access_token"].ToString();
                 return AccessToken;
             }
 
