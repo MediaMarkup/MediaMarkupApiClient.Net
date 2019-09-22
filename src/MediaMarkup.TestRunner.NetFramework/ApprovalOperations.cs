@@ -41,7 +41,49 @@ namespace MediaMarkup.TestRunner.NetFramework
             Console.WriteLine("Creating new approval...");
             var approvalResult = await _apiClient.Approvals.Create(filePath, requestParameters);
             Console.WriteLine($"New approval created:{approvalResult.Id}");
+        }
 
+        internal async Task GetApproval()
+        {
+            Printer.PrintStepTitle("Get Approval Details");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.WriteLine($"Reading approval {id}..");
+            var approval = await _apiClient.Approvals.Get(id);
+
+            Printer.PrintApproval(approval);
+        }
+
+        internal async Task UpdateApproval()
+        {
+            Printer.PrintStepTitle("Update Existing Approval");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.Write("Enter New Name:");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter New Owner ID:");
+            string ownerId = Console.ReadLine();
+
+            Console.Write("Set Active Status (1 or 0):");
+            bool.TryParse(Console.ReadLine(), out bool active);
+
+            var parameters = new ApprovalUpdateParameters
+            {
+                Active = active,
+                Name = name,
+                OwnerUserId = ownerId
+            };
+
+            Console.WriteLine($"Updating approval {id}...");
+            var approval = await _apiClient.Approvals.Update(id, parameters);
+            Printer.PrintApproval(approval);
         }
     }
 }

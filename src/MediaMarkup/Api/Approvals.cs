@@ -39,7 +39,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<Approval> Get(string id)
         {
-            var response = await ApiClient.GetAsync($"Approvals/Get/?id={id}");
+            var response = await ApiClient.GetAsync($"approvals/{id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -125,14 +125,16 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task Update(ApprovalUpdateParameters parameters)
+        public async Task<Approval> Update(string id, ApprovalUpdateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/Update/", parameters);
+            var response = await ApiClient.PutAsJsonAsync($"/approvals/{id}", parameters);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                throw new ApiException("Approvals.Update", response.StatusCode, await response.Content.ReadAsStringAsync());
+                return await Get(id);
             }
+
+            throw new ApiException("Approvals.Update", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
         /// <inheritdoc />

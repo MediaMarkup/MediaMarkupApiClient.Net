@@ -1,4 +1,5 @@
 ﻿using MediaMarkup.Api.Models;
+using Newtonsoft.Json;
 using System;
 
 namespace MediaMarkup.TestRunner.NetFramework
@@ -22,6 +23,15 @@ namespace MediaMarkup.TestRunner.NetFramework
             Console.WriteLine("User Details:");
             Console.WriteLine($"ID  :{user.Id}");
             Console.WriteLine($"Name:{user.FirstName} {user.LastName}");
+            Console.WriteLine("-------------------------\n");
+        }
+
+        internal static void PrintApproval(Approval approval)
+        {
+            var response = JsonConvert.SerializeObject(approval);
+            Console.WriteLine("\n-------------------------");
+            Console.WriteLine("Approval Details:");
+            Console.WriteLine(response);
             Console.WriteLine("-------------------------\n");
         }
     }

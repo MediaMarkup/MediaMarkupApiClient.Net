@@ -51,13 +51,8 @@ namespace MediaMarkup.TestRunner.NetFramework
                 await UserOperations.DeleteUserById();
 
                 await ApprovalOperations.CreateApproval();
-                //GetUsersByEmails();
-                //GetUsersByIds();
-                //GetUsersByRoles();
-                //GetUsersByQuery();
-
-                //CreateApproval(); 
-                //GetApproval();
+                await ApprovalOperations.GetApproval();
+                await ApprovalOperations.UpdateApproval();
                 //GetApprovals();
                 //UpdateApproval();
                 //ExportReport();

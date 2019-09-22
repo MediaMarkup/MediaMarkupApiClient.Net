@@ -42,7 +42,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task Update(ApprovalUpdateParameters parameters);
+        Task<Approval> Update(string id, ApprovalUpdateParameters parameters);
 
         /// <summary>
         /// Updates the Approval OwnerUserId
