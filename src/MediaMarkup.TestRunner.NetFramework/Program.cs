@@ -46,7 +46,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
                 await UserOperations.GetUserById();
                 await UserOperations.UpdateUser();
-
+                await UserOperations.DeleteUserById();
 
                 //GetUsersByEmails();
                 //GetUsersByIds();

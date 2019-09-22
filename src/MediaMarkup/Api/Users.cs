@@ -88,7 +88,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task Delete(string id, bool throwExceptionIfError = true)
         {
-            var response = await ApiClient.DeleteAsync($"Users/Delete/?id={id}");
+            var response = await ApiClient.DeleteAsync($"users/{id}");
 
             if (!response.IsSuccessStatusCode && throwExceptionIfError)
             {

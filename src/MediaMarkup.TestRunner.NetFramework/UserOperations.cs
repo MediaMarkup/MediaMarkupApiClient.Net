@@ -104,5 +104,24 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             Printer.PrintUser(user);
         }
+
+        internal async Task DeleteUserById()
+        {
+            Printer.PrintStepTitle("Delete User By ID");
+
+            Console.Write("Enter User ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.WriteLine($"Deleting {id}...");
+            await _apiClient.Users.Delete(id);
+
+            Console.WriteLine($"Searching {id}...");
+            var user = await _apiClient.Users.GetById(id);
+            Printer.PrintUser(user);
+
+            Console.WriteLine($"Deleted {id} successfully...");
+        }
     }
 }
