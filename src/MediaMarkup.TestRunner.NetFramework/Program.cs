@@ -53,6 +53,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 await ApprovalOperations.CreateApproval();
                 await ApprovalOperations.GetApproval();
                 await ApprovalOperations.UpdateApproval();
+                await ApprovalOperations.DeleteApproval();
                 //GetApprovals();
                 //UpdateApproval();
                 //ExportReport();

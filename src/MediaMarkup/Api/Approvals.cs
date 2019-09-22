@@ -137,37 +137,25 @@ namespace MediaMarkup.Api
             throw new ApiException("Approvals.Update", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
+        [Obsolete("This method is obsolete. Use Update method.", true)]
         /// <inheritdoc />
         public async Task UpdateOwnerUserId(ApprovalUpdateOwnerUserIdParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/UpdateOwnerUserId/", parameters);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApiException("Approvals.UpdateOwnerUserId", response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+            throw new NotImplementedException("This method is obsolete.Use Update method.");
         }
 
+        [Obsolete("This method is obsolete. Use Update method.", true)]
         /// <inheritdoc />
         public async Task UpdateName(ApprovalUpdateNameParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/UpdateName/", parameters);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApiException("Approvals.UpdateName", response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+            throw new NotImplementedException("This method is obsolete.Use Update method.");
         }
 
+        [Obsolete("This method is obsolete. Use Update method.", true)]
         /// <inheritdoc />
         public async Task SetActive(ApprovalSetActiveParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/SetActive/", parameters);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApiException("Approvals.SetActive", response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+            throw new NotImplementedException("This method is obsolete.Use Update method.");
         }
 
         /// <inheritdoc />
@@ -249,7 +237,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task Delete(string id)
         {
-            var response = await ApiClient.DeleteAsync($"Approvals/Delete/?id={id}");
+            var response = await ApiClient.DeleteAsync($"/approvals/{id}");
 
             if (!response.IsSuccessStatusCode)
             {

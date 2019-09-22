@@ -28,6 +28,12 @@ namespace MediaMarkup.TestRunner.NetFramework
 
         internal static void PrintApproval(Approval approval)
         {
+            if (approval == null)
+            {
+                Console.WriteLine("Approval not found!");
+                return;
+            }
+
             var response = JsonConvert.SerializeObject(approval);
             Console.WriteLine("\n-------------------------");
             Console.WriteLine("Approval Details:");

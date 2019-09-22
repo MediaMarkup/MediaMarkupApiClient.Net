@@ -85,5 +85,29 @@ namespace MediaMarkup.TestRunner.NetFramework
             var approval = await _apiClient.Approvals.Update(id, parameters);
             Printer.PrintApproval(approval);
         }
+
+        internal async Task DeleteApproval()
+        {
+            Printer.PrintStepTitle("Delete Existing Approval");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.WriteLine($"Deleting approval {id}...");
+            await _apiClient.Approvals.Delete(id);
+            Console.WriteLine($"Reading approval {id}...");
+
+            try
+            {
+                var approval = await _apiClient.Approvals.Get(id);
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Printer.PrintApproval(null);
+            }
+        }
     }
 }
