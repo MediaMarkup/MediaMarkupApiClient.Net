@@ -16,9 +16,6 @@ namespace MediaMarkup.Api.Models
             FirstName = string.Empty;
             LastName = string.Empty;
             EmailAddress = string.Empty;
-            WebLoginEnabled = false;
-            Password = String.Empty;
-            UserRole = UserRole.Reviewer;
         }
 
         /// <summary>
@@ -42,19 +39,7 @@ namespace MediaMarkup.Api.Models
         /// <summary>
         /// Specifies the User Role, Administrator, Manager, Reviewer
         /// </summary>
-        [JsonProperty("userRole")]
-        public UserRole UserRole { get; set; }
-
-        /// <summary>
-        /// Enables login via mediamarkup.com on tenant account
-        /// </summary>
-        [JsonProperty("webLoginEnabled")]
-        public bool WebLoginEnabled { get; set; }
-
-        /// <summary>
-        /// Sets password for web login if WebLoginEnabled is set to true
-        /// </summary>
-        [JsonProperty("password")]
-        public string Password { get; set; }
+        [JsonProperty("role")]
+        public string Role { get; set; }
     }
 }

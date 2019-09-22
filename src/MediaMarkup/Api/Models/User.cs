@@ -42,7 +42,7 @@ namespace MediaMarkup.Api.Models
         /// User Role
         /// </summary>
         [JsonProperty("role")]
-        public UserRole UserRole { get; set; }
+        public string Role { get; set; }
 
         /// <summary>
         /// Web Login Enabled
@@ -54,6 +54,6 @@ namespace MediaMarkup.Api.Models
         /// Account Owner
         /// </summary>
         [JsonProperty("accountOwner")]
-        public bool AccountOwner { get => UserRole == UserRole.Administrator; }
+        public bool AccountOwner { get => Role == UserRole.Owner; }
     }
 }

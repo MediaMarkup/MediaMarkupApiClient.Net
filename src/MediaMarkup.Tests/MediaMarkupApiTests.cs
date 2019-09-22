@@ -46,7 +46,7 @@ namespace MediaMarkup.Tests
                 FirstName = "TestUserApiMethods",
                 LastName = "TestUserApiMethods",
                 EmailAddress = $"TestUserApiMethods{Guid.NewGuid():N}@brightertools.com",
-                UserRole = UserRole.Administrator,
+                Role = UserRole.Administrator,
                 Password = "",
                 WebLoginEnabled = false
             };
@@ -66,7 +66,7 @@ namespace MediaMarkup.Tests
                 FirstName = "updated",
                 LastName = "updated",
                 EmailAddress = userCreated.EmailAddress,
-                UserRole = UserRole.Administrator,
+                Role = UserRole.Administrator,
                 WebLoginEnabled = true
             };
             var updatedUser = await _context.ApiClient.Users.Update(userUpdateParameters);

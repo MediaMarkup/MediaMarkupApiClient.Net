@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaMarkup", "src\MediaMarkup\MediaMarkup.csproj", "{4F440A57-0B66-4C61-A325-1F9CE0A11DB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaMarkup.Tests", "src\MediaMarkup.Tests\MediaMarkup.Tests.csproj", "{A3A2DFF3-0560-4D95-BD37-42DD10869FB9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaMarkup.TestRunner.NetFramework", "src\MediaMarkup.TestRunner.NetFramework\MediaMarkup.TestRunner.NetFramework.csproj", "{B1A525A3-BB5E-420D-92C9-D0F8586F0C90}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{4F440A57-0B66-4C61-A325-1F9CE0A11DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F440A57-0B66-4C61-A325-1F9CE0A11DB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F440A57-0B66-4C61-A325-1F9CE0A11DB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3A2DFF3-0560-4D95-BD37-42DD10869FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3A2DFF3-0560-4D95-BD37-42DD10869FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3A2DFF3-0560-4D95-BD37-42DD10869FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3A2DFF3-0560-4D95-BD37-42DD10869FB9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B1A525A3-BB5E-420D-92C9-D0F8586F0C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B1A525A3-BB5E-420D-92C9-D0F8586F0C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1A525A3-BB5E-420D-92C9-D0F8586F0C90}.Release|Any CPU.ActiveCfg = Release|Any CPU

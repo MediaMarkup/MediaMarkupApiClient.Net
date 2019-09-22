@@ -3,11 +3,21 @@
     /// <summary>
     /// User role associated with User
     /// </summary>
-    public enum UserRole
+    public static class UserRole
     {
-        Unknown = 0,
-        Reviewer = 1,
-        Manager = 2,
-        Administrator = 3
+        public const string Owner = "Owner";
+        public const string Admin = "Admin";
+        public const string User = "User";
+        public const string Reviewer = "Reviewer";
+        public const string Observer = "Observer";
+
+        public static string[] Roles => new string[]
+        {
+            Owner,
+            Admin,
+            User,
+            Reviewer,
+            Observer
+        };
     }
 }

@@ -46,13 +46,13 @@ namespace MediaMarkup.Api.Models
         /// <summary>
         /// Specifies the User Role, Administrator, Manager, Reviewer
         /// </summary>
-        [JsonProperty("userRole")]
-        public UserRole UserRole { get; set; }
+        [JsonProperty("role")]
+        public string Role { get; set; }
 
         /// <summary>
         /// Enables login via mediamarkup.com on tenant account
         /// </summary>
-        [JsonProperty("webLoginEnabled")]
+        [JsonProperty("loginEnabled")]
         public bool WebLoginEnabled { get; set; }
     }
 }

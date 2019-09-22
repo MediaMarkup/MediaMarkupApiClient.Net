@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediaMarkup.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,9 @@ namespace MediaMarkup.TestRunner.NetFramework
 {
     class Program
     {
-        static void Main(string[] args)
+        static UserOperations UserOperations;
+
+        async static Task Main(string[] args)
         {
             Console.Write("Enter your Client ID:");
             string clientId = Console.ReadLine();
@@ -25,28 +28,58 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             try
             {
+                Console.WriteLine("Authorizing client details and retrieving AccessToken...");
                 var apiClient = new ApiClient(settings);
                 apiClient.InitializeAsync().Wait();
 
-                SearchUserByEmail(apiClient);
+                UserOperations = new UserOperations(apiClient);
+
+                await UserOperations.InviteUser();
+                await UserOperations.GetUserByEmail();
+                //GetUserById();
+                //UpdateUser();
+                
+                
+                //GetUsersByEmails();
+                //GetUsersByIds();
+                //GetUsersByRoles();
+                //GetUsersByQuery();
+
+                //CreateApproval();
+                //GetApproval();
+                //GetApprovals();
+                //UpdateApproval();
+                //ExportReport();
+
+
+                //CreateApprovalVersion();
+                //DeleteApprovalVersion();
+
+                //CreateApprovalGroup();
+                //UpdateApprovalGroup();
+
+                //UpsertApprovalGroupUser();
+                //UpdateApprovalGroupUserDecision();
+                //ResetApprovalGroupUserDecision();
+                //DeleteApprovalGroupUser();
+
+                //ResetApprovalGroupDecision();
+
+                //DeleteApproval();
+                //DeleteUser();  
+
+
             }
-            catch (ApiException apie )
+            catch (ApiException e )
             {
 
                 Console.WriteLine("An error occured...");
-                Console.WriteLine(apie.Message);
+                Console.WriteLine("!!!!!!!!!!!!!!!!!!!");
+                Console.WriteLine(e.Message);
+                Console.WriteLine("!!!!!!!!!!!!!!!!!!!");
             }
         }
 
-        private static void SearchUserByEmail(ApiClient apiClient)
-        {
-            Console.Write("Enter an email address to search:");
-            string email = Console.ReadLine();
-
-            Console.WriteLine($"Searching {email}...");
-            var user = apiClient.Users.GetByEmail(email).Result;
-
-            Console.WriteLine($"{user.FirstName} {user.LastName} found.");
-        }
+        
     }
 }
