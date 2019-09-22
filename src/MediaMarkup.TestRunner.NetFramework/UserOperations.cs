@@ -6,7 +6,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 {
     internal class UserOperations
     {
-        private static ApiClient _apiClient;
+        private readonly ApiClient _apiClient;
 
         internal UserOperations(ApiClient apiClient)
         {

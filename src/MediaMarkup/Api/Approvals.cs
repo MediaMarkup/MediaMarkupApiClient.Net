@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using MediaMarkup.Api.Models;
 using MediaMarkup.Core;
@@ -35,15 +36,6 @@ namespace MediaMarkup.Api
             throw new ApiException("Approvals.GetList", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<ApprovalCreateResult> Create(string filePath, ApprovalCreateParameters parameters)
-        {
-            var filename = Path.GetFileName(filePath);
-
-            var fileContent = File.ReadAllBytes(filePath);
-
-            return await Create(filename, fileContent, parameters);
-        }
-
         /// <inheritdoc />
         public async Task<Approval> Get(string id)
         {
@@ -55,6 +47,14 @@ namespace MediaMarkup.Api
             }
 
             throw new ApiException("Approvals.Get", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+
+        public async Task<ApprovalCreateResult> Create(string filePath, ApprovalCreateParameters parameters)
+        {
+            var filename = Path.GetFileName(filePath);
+            var fileContent = File.ReadAllBytes(filePath);
+            return await Create(filename, fileContent, parameters);
         }
 
         /// <summary>
@@ -92,16 +92,18 @@ namespace MediaMarkup.Api
 
             using (var content = new MultipartFormDataContent())
             {
-                content.Add(new StreamContent(new MemoryStream(fileContent)), "file", WebUtility.UrlEncode(filename));
+                var fileFormContent = new ByteArrayContent(fileContent, 0, fileContent.Length);
+                fileFormContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "file", FileName = filename };
+                fileFormContent.Headers.ContentLength = fileContent.Length;
+
+                content.Add(fileFormContent);
 
                 var values = new[]
                 {
                     new KeyValuePair<string, string>("name", parameters.Name),
                     new KeyValuePair<string, string>("ownerUserId", parameters.OwnerUserId),
                     new KeyValuePair<string, string>("numberOfDecisionsRequired", (parameters.NumberOfDecisionsRequired ?? 0).ToString()),
-                    new KeyValuePair<string, string>("addOwnerToInitialApprovalGroup", (parameters.AddOwnerToInitialApprovalGroup ?? false).ToString()),
-                    new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? ""),
-                    new KeyValuePair<string, string>("reviewers", parameters.Reviewers.ToJson())
+                    new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? "")
                 };
 
                 foreach (var keyValuePair in values)
@@ -109,7 +111,9 @@ namespace MediaMarkup.Api
                     content.Add(new StringContent(keyValuePair.Value), $"\"{keyValuePair.Key}\"");
                 }
 
-                var response = await ApiClient.PostAsync("Approvals/Create/", content);
+
+                ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+                var response = await ApiClient.PostAsync("/approvals", content);
 
                 if (response.IsSuccessStatusCode)
                 {

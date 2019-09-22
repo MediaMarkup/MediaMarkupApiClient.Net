@@ -10,6 +10,7 @@ namespace MediaMarkup.TestRunner.NetFramework
     class Program
     {
         static UserOperations UserOperations;
+        static ApprovalOperations ApprovalOperations;
 
         async static Task Main(string[] args)
         {
@@ -38,6 +39,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Console.WriteLine($"\n{token}\n");
 
                 UserOperations = new UserOperations(apiClient);
+                ApprovalOperations = new ApprovalOperations(apiClient);
 
                 Console.WriteLine("To skip any of the steps, just enter -1 as the input");
 
@@ -48,12 +50,13 @@ namespace MediaMarkup.TestRunner.NetFramework
                 await UserOperations.UpdateUser();
                 await UserOperations.DeleteUserById();
 
+                await ApprovalOperations.CreateApproval();
                 //GetUsersByEmails();
                 //GetUsersByIds();
                 //GetUsersByRoles();
                 //GetUsersByQuery();
 
-                //CreateApproval();
+                //CreateApproval(); 
                 //GetApproval();
                 //GetApprovals();
                 //UpdateApproval();
