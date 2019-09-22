@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using MediaMarkup.Api.Models;
 using MediaMarkup.Core;
+using Newtonsoft.Json;
 
 namespace MediaMarkup.Api
 {
@@ -65,13 +66,13 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task<User> Update(UserUpdateParameters parameters)
+        public async Task<User> Update(string id, UserUpdateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Users/Update/", parameters);
+            var response = await ApiClient.PutAsJsonAsync($"users/{id}", parameters);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsJsonAsync<User>();
+                return await GetById(id);
             }
 
             throw new ApiException("Users.Update", response.StatusCode, await response.Content.ReadAsStringAsync());

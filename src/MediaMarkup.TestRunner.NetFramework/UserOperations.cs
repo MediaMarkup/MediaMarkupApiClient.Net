@@ -57,6 +57,39 @@ namespace MediaMarkup.TestRunner.NetFramework
             Printer.PrintUser(user);
         }
 
+        internal async Task UpdateUser()
+        {
+            Printer.PrintStepTitle("Update User Details");
+
+            Console.Write("Enter a User ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            var existingUser = await _apiClient.Users.GetById(id);
+            Printer.PrintUser(existingUser);
+            if (existingUser == null) return;
+
+            Console.Write("Enter New Name:");
+            string newName = Console.ReadLine();
+
+            Console.Write("Enter New Lastname:");
+            string newLastName = Console.ReadLine();
+
+            Console.Write("Enter New Password (min 6 characters):");
+            string newPassword = Console.ReadLine();
+
+            var parameters = new UserUpdateParameters
+            {
+                FirstName = newName,
+                LastName = newLastName,
+                Password = newPassword
+            };
+
+            var updatedUser = await _apiClient.Users.Update(id, parameters);
+            Printer.PrintUser(updatedUser);
+        }
+
         internal async Task GetUserByEmail()
         {
             Printer.PrintStepTitle("Get User Details By Email");

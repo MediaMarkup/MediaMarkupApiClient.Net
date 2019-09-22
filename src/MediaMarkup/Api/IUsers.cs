@@ -34,7 +34,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task<User> Update(UserUpdateParameters parameters);
+        Task<User> Update(string id, UserUpdateParameters parameters);
 
         /// <summary>
         /// Updates the specified user's password.
