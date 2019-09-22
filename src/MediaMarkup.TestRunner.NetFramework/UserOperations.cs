@@ -4,19 +4,22 @@ using System.Threading.Tasks;
 
 namespace MediaMarkup.TestRunner.NetFramework
 {
-    public class UserOperations
+    internal class UserOperations
     {
         private static ApiClient _apiClient;
 
-        public UserOperations(ApiClient apiClient)
+        internal UserOperations(ApiClient apiClient)
         {
             _apiClient = apiClient;
         }
 
-        public async Task InviteUser()
+        internal async Task InviteUser()
         {
+            Printer.PrintStepTitle("User Invitation");
             Console.Write("Enter an email address to invite:");
             string email = Console.ReadLine();
+
+            if (email == "-1") return;
 
             Console.Write("Enter first name:");
             string firstName = Console.ReadLine();
@@ -40,15 +43,33 @@ namespace MediaMarkup.TestRunner.NetFramework
             Console.WriteLine(invitation.Url);
         }
 
-        public async Task GetUserByEmail()
+        internal async Task GetUserById()
         {
+            Printer.PrintStepTitle("Get User Details By ID");
+            Console.Write("Enter a User ID to search:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.WriteLine($"Searching {id}...");
+            var user = await _apiClient.Users.GetById(id);
+
+            Printer.PrintUser(user);
+        }
+
+        internal async Task GetUserByEmail()
+        {
+            Printer.PrintStepTitle("Get User Details By Email");
+
             Console.Write("Enter an email address to search:");
             string email = Console.ReadLine();
+
+            if (email == "-1") return;
 
             Console.WriteLine($"Searching {email}...");
             var user = await _apiClient.Users.GetByEmail(email);
 
-            Console.WriteLine($"{user.FirstName} {user.LastName} found.");
+            Printer.PrintUser(user);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<User> GetById(string id, bool throwExceptionIfNull = false)
         {
-            var response = await ApiClient.GetAsync($"Users/GetById?id={id}");
+            var response = await ApiClient.GetAsync($"users/{id}");
 
             if (response.IsSuccessStatusCode)
             {

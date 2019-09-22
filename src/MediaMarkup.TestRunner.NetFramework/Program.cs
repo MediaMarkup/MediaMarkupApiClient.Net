@@ -13,11 +13,14 @@ namespace MediaMarkup.TestRunner.NetFramework
 
         async static Task Main(string[] args)
         {
-            Console.Write("Enter your Client ID:");
-            string clientId = Console.ReadLine();
+            Console.WriteLine("This is a sample console app to drive MediaMarkup API");
 
-            Console.Write("Enter your Client Secret:");
-            string clientScret = Console.ReadLine();
+            Console.WriteLine("--------");
+            //Console.Write("Enter your Client ID:");
+            string clientId = "C04F6E4281E34F9DB3FB14093FE3F8DE"; //Console.ReadLine();
+
+            //Console.Write("Enter your Client Secret:");
+            string clientScret = "03347DAA-A6AE-4F42-87C5-20D5A779368A"; //Console.ReadLine();
 
             var settings = new Settings
             {
@@ -30,16 +33,21 @@ namespace MediaMarkup.TestRunner.NetFramework
             {
                 Console.WriteLine("Authorizing client details and retrieving AccessToken...");
                 var apiClient = new ApiClient(settings);
-                apiClient.InitializeAsync().Wait();
+                var token = await apiClient.InitializeAsync();
+                Console.WriteLine("AccessToken acquired, ready to drive!");
+                Console.WriteLine($"\n{token}\n");
 
                 UserOperations = new UserOperations(apiClient);
 
+                Console.WriteLine("To skip any of the steps, just enter -1 as the input");
+
                 await UserOperations.InviteUser();
                 await UserOperations.GetUserByEmail();
-                //GetUserById();
+
+                await UserOperations.GetUserById();
                 //UpdateUser();
-                
-                
+
+
                 //GetUsersByEmails();
                 //GetUsersByIds();
                 //GetUsersByRoles();
@@ -68,7 +76,9 @@ namespace MediaMarkup.TestRunner.NetFramework
                 //DeleteApproval();
                 //DeleteUser();  
 
-
+                Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!");
+                Console.WriteLine("End of drive...Press any key to close the program.");
+                Console.ReadKey();
             }
             catch (ApiException e )
             {
