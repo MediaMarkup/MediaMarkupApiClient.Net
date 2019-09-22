@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using MediaMarkup.Api.Models;
@@ -78,14 +79,10 @@ namespace MediaMarkup.Api
             throw new ApiException("Users.Update", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
+        [Obsolete("This method is not supported. Please use Update method", true)]
         public async Task UpdatePassword(UserUpdatePasswordParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Users/UpdatePassword/", parameters);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApiException("Users.UpdatePassword", response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+            throw new NotImplementedException("Please use Update method. This method is obsolete");
         }
 
         /// <inheritdoc />
