@@ -360,7 +360,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<byte[]> ExportAnnotationReport(ExportReportParameters parameters)
         {
-            var response =  await ApiClient.GetAsync($"Approvals/ExportAnnotationReport/?{parameters.ToQueryStringValues()}");
+            var response =  await ApiClient.GetAsync($"/approvals/{parameters.Id}/report?groupId={parameters.ApprovalGroupId}&version={parameters.Version}");
             
             if (response.IsSuccessStatusCode)
             {

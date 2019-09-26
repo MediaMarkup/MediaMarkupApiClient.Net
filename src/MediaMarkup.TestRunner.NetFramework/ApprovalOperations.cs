@@ -109,5 +109,45 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Printer.PrintApproval(null);
             }
         }
+
+        internal async Task ExportApprovalReport()
+        {
+            Printer.PrintStepTitle("Export Report Of An Existing Approval");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.WriteLine($"Reading approval {id}..");
+            var approval = await _apiClient.Approvals.Get(id);
+
+            Printer.PrintApproval(approval);
+
+            Console.Write("Enter Approval Group ID:");
+            string approvalGroupId = Console.ReadLine();
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+
+            var parameters = new ExportReportParameters
+            {
+                ApprovalGroupId = approvalGroupId,
+                Id = id,
+                Version = version
+            };
+
+            Console.WriteLine("Exporting report...");
+            var result = await _apiClient.Approvals.ExportAnnotationReport(parameters);
+            Console.WriteLine($"Saving export file ({result.Length})...");
+
+            var path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var directory = System.IO.Path.GetDirectoryName(path);
+            var reportPath = Path.Combine(directory, $"{Guid.NewGuid().ToString().Substring(0, 5)}.pdf");
+
+            File.WriteAllBytes(reportPath, result);
+            Console.WriteLine($"Saved to ${reportPath}");
+        }
     }
 }
