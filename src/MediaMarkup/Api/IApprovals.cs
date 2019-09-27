@@ -118,7 +118,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task AddApprovalGroupUser(ApprovalGroupUserParameters parameters);
+        Task UpsertApprovalGroupUser(ApprovalGroupUserParameters parameters);
 
         /// <summary>
         /// Adds multiple approval group users to the specified approval version

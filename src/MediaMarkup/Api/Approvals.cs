@@ -275,9 +275,9 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task AddApprovalGroupUser(ApprovalGroupUserParameters parameters)
+        public async Task UpsertApprovalGroupUser(ApprovalGroupUserParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/AddApprovalGroupUser/", parameters);
+            var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users", parameters);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -285,6 +285,7 @@ namespace MediaMarkup.Api
             }
         }
 
+        [Obsolete("Apiv2 doesn't support batch approval group user import. Contact support for more details.", true)]
         /// <inheritdoc />
         public async Task AddApprovalGroupUsers(ApprovalGroupUsersParameters parameters)
         {
@@ -296,6 +297,7 @@ namespace MediaMarkup.Api
             }
         }
 
+        [Obsolete("Please use UpsertApprovalGroupUser method", true)]
         /// <inheritdoc />
         public async Task UpdateApprovalGroupUser(ApprovalGroupUserParameters parameters)
         {

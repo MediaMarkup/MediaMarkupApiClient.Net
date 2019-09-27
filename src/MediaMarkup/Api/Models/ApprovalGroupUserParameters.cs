@@ -19,7 +19,6 @@ namespace MediaMarkup.Api.Models
             CommentsEnabled = false;
             AllowDecision = false;
             AllowDownload = false;
-            AllowVersionSelection = false;
         }
 
         /// <summary>
@@ -31,7 +30,7 @@ namespace MediaMarkup.Api.Models
         /// <summary>
         /// The Approval Version
         /// </summary>
-        [JsonProperty("version")]
+        [JsonProperty("approvalVersion")]
         public int Version { get; set; }
 
         /// <summary>
@@ -70,12 +69,6 @@ namespace MediaMarkup.Api.Models
 
         //[JsonProperty("allowGroupView")]
         //public bool AllowGroupView { get; set; }
-
-        /// <summary>
-        /// Allows version selection, otherwise only the latest version will be displayed for the user
-        /// </summary>
-        [JsonProperty(PropertyName = "versionSelection")]
-        public bool AllowVersionSelection { get; set; }
 
         /// <summary>
         /// Enables/Disables user
