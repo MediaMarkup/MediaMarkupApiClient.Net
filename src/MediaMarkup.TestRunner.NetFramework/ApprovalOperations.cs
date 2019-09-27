@@ -191,5 +191,32 @@ namespace MediaMarkup.TestRunner.NetFramework
             var approvalListResult = await _apiClient.Approvals.GetList(parameters);
             approvalListResult.Approvals.ForEach(approval => Printer.PrintApproval(approval));
         }
+
+        public async Task CreateApprovalVersion()
+        {
+            Printer.PrintStepTitle("Creates A New Version Of An Existing Approval");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.Write("Enter Number of Decisions Required:");
+            string numberOfDecisionsRequiredInput = Console.ReadLine();
+            int.TryParse(numberOfDecisionsRequiredInput, out int numberOfDecisionsRequired);
+
+            var filePath = Path.Combine("dummy.pdf");
+
+            var parameters = new ApprovalCreateVersionParameters
+            {
+                ApprovalId = id,
+                NumberOfDecisionsRequired = numberOfDecisionsRequired,
+            };
+
+            Console.WriteLine("Creating new approval...");
+            var approvalResult = await _apiClient.Approvals.CreateVersion(filePath, parameters);
+            Console.WriteLine($"New approval created:{approvalResult.Id} - Version {approvalResult.Version}");
+        }
     }
+
+
 }

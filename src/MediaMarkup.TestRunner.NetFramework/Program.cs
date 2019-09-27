@@ -31,7 +31,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 SecretKey = clientScret
             };
 
-            
+
 
             try
             {
@@ -60,10 +60,11 @@ namespace MediaMarkup.TestRunner.NetFramework
                     { 8, ApprovalOperations.UpdateApproval },
                     { 9, ApprovalOperations.DeleteApproval },
                     { 10, ApprovalOperations.ExportApprovalReport },
-                    { 11, ApprovalOperations.GetApprovalList }
+                    { 11, ApprovalOperations.GetApprovalList },
+                    { 12, ApprovalOperations.CreateApprovalVersion }
                 };
 
-                
+
 
                 int operationSelected = -1;
 
@@ -128,7 +129,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!");
                 Console.WriteLine("End of drive...Press any key to close the program.");
             }
-            catch (ApiException e )
+            catch (ApiException e)
             {
 
                 Console.WriteLine("An error occured...");
@@ -138,6 +139,6 @@ namespace MediaMarkup.TestRunner.NetFramework
             }
         }
 
-        
+
     }
 }

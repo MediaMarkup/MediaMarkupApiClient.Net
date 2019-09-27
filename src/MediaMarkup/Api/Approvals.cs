@@ -193,17 +193,18 @@ namespace MediaMarkup.Api
 
             using (var content = new MultipartFormDataContent())
             {
-                content.Add(new StreamContent(new MemoryStream(fileContent)), "file", WebUtility.UrlEncode(filename));
+                var fileFormContent = new ByteArrayContent(fileContent, 0, fileContent.Length);
+                fileFormContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "file", FileName = filename };
+                fileFormContent.Headers.ContentLength = fileContent.Length;
+
+                content.Add(fileFormContent);
 
                 var values = new[]
                 {
                     new KeyValuePair<string, string>("approvalId", parameters.ApprovalId),
-                    new KeyValuePair<string, string>("lockPreviousVersion", parameters.LockPreviousVersion.ToString().ToLower()),
-                    new KeyValuePair<string, string>("copyApprovalGroups", parameters.CopyApprovalGroups.ToString().ToLower()),
-                    new KeyValuePair<string, string>("numberOfDecisionsRequired", (parameters.NumberOfDecisionsRequired ?? 0).ToString()),
-                    new KeyValuePair<string, string>("addOwnerToInitialApprovalGroup", (parameters.AddOwnerToInitialApprovalGroup ?? false).ToString()),
-                    new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? ""),
-                    new KeyValuePair<string, string>("reviewers", parameters.Reviewers.ToJson())
+                    new KeyValuePair<string, string>("CopyApprovalGroups", false.ToString()),
+                    new KeyValuePair<string, string>("SendNotifications", false.ToString()),
+                    new KeyValuePair<string, string>("LockPreviousVersion", false.ToString())
                 };
 
                 foreach (var keyValuePair in values)
@@ -211,7 +212,9 @@ namespace MediaMarkup.Api
                     content.Add(new StringContent(keyValuePair.Value), $"\"{keyValuePair.Key}\"");
                 }
 
-                var response = await ApiClient.PostAsync("Approvals/CreateVersion/", content);
+
+                ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+                var response = await ApiClient.PostAsync($"approvals/{parameters.ApprovalId}/versions", content);
 
                 if (response.IsSuccessStatusCode)
                 {
