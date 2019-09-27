@@ -275,6 +275,19 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        public async Task<bool> UpdateApprovalGroup(ApprovalGroupUpdateParameters parameters)
+        {
+            var response = await ApiClient.PutAsJsonAsync($"/approvals/{parameters.ApprovalId}/groups", parameters);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            throw new ApiException("Approvals.AddApprovalGroup", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+        /// <inheritdoc />
         public async Task UpsertApprovalGroupUser(ApprovalGroupUserParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users", parameters);
@@ -332,6 +345,7 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        [Obsolete("Please use UpdateApprovalGroup method", true)]
         public async Task SetApprovalGroupUserDecision(ApprovalGroupUserDecisionParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}/decisions", parameters);
@@ -343,6 +357,7 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        [Obsolete("Please use UpdateApprovalGroup method", true)]
         public async Task SetApprovalVersionLock(ApprovalVersionLockParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync("Approvals/SetApprovalVersionLock/", parameters);
@@ -354,6 +369,7 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        [Obsolete("Please use UpdateApprovalGroup method", true)]
         public async Task SetApprovalGroupEnabled(ApprovalGroupSetEnabledParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync("Approvals/SetApprovalGroupEnabled/", parameters);
@@ -365,6 +381,7 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        [Obsolete("Please use UpdateApprovalGroup method", true)]
         public async Task SetApprovalGroupReadonly(ApprovalGroupSetReadOnlyParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync("Approvals/SetApprovalGroupReadonly/", parameters);

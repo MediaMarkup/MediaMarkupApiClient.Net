@@ -412,6 +412,42 @@ namespace MediaMarkup.TestRunner.NetFramework
             var _ = await _apiClient.Approvals.AddApprovalGroup(parameters);
             Console.WriteLine($"Successfully created approval group {name}");
         }
+
+        public async Task UpdateApprovalGroup()
+        {
+            Printer.PrintStepTitle("Updates Existing Approval Group");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.Write("Enter Approval Group ID:");
+            string groupId = Console.ReadLine();
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+            Console.Write("Enter Group Name:");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter Number of Decisions Required:");
+            string numberOfDecisionsInput = Console.ReadLine();
+            int.TryParse(numberOfDecisionsInput, out int numberOfDecisions);
+
+            var parameters = new ApprovalGroupUpdateParameters
+            {
+                ApprovalId = id,
+                ApprovalGroupId = groupId,
+                Name = name,
+                NumberOfDecisionsRequired = numberOfDecisions,
+                Version = version
+            };
+
+            Console.WriteLine("Updating group...");
+            var _ = await _apiClient.Approvals.UpdateApprovalGroup(parameters);
+            Console.WriteLine($"Successfully created approval group {name}");
+        }
     }
 
 
