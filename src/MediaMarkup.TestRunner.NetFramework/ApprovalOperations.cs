@@ -302,6 +302,39 @@ namespace MediaMarkup.TestRunner.NetFramework
             await _apiClient.Approvals.RemoveApprovalGroupUser(parameters);
             Console.WriteLine("Successfully removed user from approval group");
         }
+
+        public async Task ResetApprovalGroupUserDecision()
+        {
+            Printer.PrintStepTitle("Resets Existing User Decision");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            var approval = await _apiClient.Approvals.Get(id);
+            Printer.PrintApproval(approval);
+
+            Console.Write("Enter Approval Group Id:");
+            string groupId = Console.ReadLine();
+
+            Console.Write("Enter User Id:");
+            string userId = Console.ReadLine();
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+            var parameters = new ApprovalGroupUserParameters
+            {
+                Id = id,
+                ApprovalGroupId = groupId,
+                UserId = userId,
+                Version = version
+            };
+
+            await _apiClient.Approvals.ResetApprovalGroupUserDecisions(parameters);
+            Console.WriteLine("Successfully reset user decesion");
+        }
     }
 
 

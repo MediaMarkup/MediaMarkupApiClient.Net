@@ -323,7 +323,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task ResetApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/ResetApprovalGroupUserDecisions/", parameters);
+            var response = await ApiClient.DeleteAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}/decisions?version={parameters.Version}");
 
             if (!response.IsSuccessStatusCode)
             {
