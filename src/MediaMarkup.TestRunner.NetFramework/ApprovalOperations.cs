@@ -149,5 +149,47 @@ namespace MediaMarkup.TestRunner.NetFramework
             File.WriteAllBytes(reportPath, result);
             Console.WriteLine($"Saved to ${reportPath}");
         }
+
+        internal async Task GetApprovalList()
+        {
+            Printer.PrintStepTitle("List and Filter Approvals");
+            Console.Write("Enter Search Query (i.e. title of the approval):");
+            string searchTerm = Console.ReadLine();
+
+            if (searchTerm == "-1") return;
+
+            Console.Write("Enter UserId to Filter by Owner ID:");
+
+            string ownerId = Console.ReadLine();
+
+            Console.WriteLine("Filter By Status");
+            Console.WriteLine("Available Values : All, Pending, Approved, NotApproved");
+            string statusInput = Console.ReadLine();
+            Enum.TryParse(statusInput, true, out Status status);
+
+            Console.WriteLine("Sort");
+            Console.WriteLine("Available values : Asc, Desc");
+            string sortDirectionInput = Console.ReadLine();
+            Enum.TryParse(sortDirectionInput, true, out SortDirection sortDirection);
+
+            Console.WriteLine("Sort By");
+            Console.WriteLine("Available Values : Name, Filename, LastUpdated, Status");
+            string sortyByInput = Console.ReadLine();
+            Enum.TryParse(sortyByInput, true, out SortBy sortBy);
+
+            Console.WriteLine("Getting approvals...");
+
+            var parameters = new ApprovalListRequestParameters
+            {
+                Page = 1,
+                SortBy = sortBy,
+                SortDirection = sortDirection,
+                TextFilter = searchTerm,
+                UserIdFilter = ownerId,
+                Status = status
+            };
+            var approvalListResult = await _apiClient.Approvals.GetList(parameters);
+            approvalListResult.Approvals.ForEach(approval => Printer.PrintApproval(approval));
+        }
     }
 }

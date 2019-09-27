@@ -17,40 +17,41 @@ namespace MediaMarkup.Api.Models
             Page = 1;
             ResultsPerPage = 50;
             TextFilter = string.Empty;
-            OwnerIdFilter = string.Empty;
             UserIdFilter = string.Empty;
-            SortBy = string.Empty;
-            SortDesc = false;
+            SortBy = SortBy.LastUpdated;
+            SortDirection = SortDirection.Desc;
+            Status = Status.All;
         }
 
         /// <summary>
         /// Page, startiung from 1
         /// </summary>
-        [JsonProperty("page")]
+        [JsonProperty("currentPage")]
         public int Page { get; set; }
 
         /// <summary>
         /// Maximum rows per page
         /// </summary>
-        [JsonProperty("resultsPerPage")]
+        [JsonProperty("limit")]
         public int? ResultsPerPage { get; set; }
 
         /// <summary>
         /// Text Filter (basic full phrase search on text fields)
         /// </summary>
-        [JsonProperty("textFilter")]
+        [JsonProperty("searchTerm")]
         public string TextFilter { get; set; }
 
         /// <summary>
         /// Approval Owner Id Filter to ensure result only contains approvals with the specified owner id.
         /// </summary>
         [JsonProperty("ownerIdFilter")]
+        [Obsolete("Please use UserIdFilter", true)]
         public string OwnerIdFilter { get; set; }
 
         /// <summary>
         /// User Id Filter to ensure result only contains approvals visible to the enabled specified user.
         /// </summary>
-        [JsonProperty("userIdFilter")]
+        [JsonProperty("ownerId")]
         public string UserIdFilter { get; set; }
 
         /// <summary>
@@ -59,12 +60,15 @@ namespace MediaMarkup.Api.Models
         /// 
         /// </summary>
         [JsonProperty("sortBy")]
-        public string SortBy { get; set; }
+        public SortBy SortBy { get; set; }
 
         /// <summary>
         /// Sort Order Direction
         /// </summary>
-        [JsonProperty("sortDesc")]
-        public bool SortDesc { get; set; }
+        [JsonProperty("sortDirection")]
+        public SortDirection SortDirection { get; set; }
+
+        [JsonProperty("status")]
+        public Status Status { get; set; }
     }
 }

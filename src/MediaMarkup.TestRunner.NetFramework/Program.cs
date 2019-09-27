@@ -59,7 +59,8 @@ namespace MediaMarkup.TestRunner.NetFramework
                     { 7, ApprovalOperations.GetApproval },
                     { 8, ApprovalOperations.UpdateApproval },
                     { 9, ApprovalOperations.DeleteApproval },
-                    { 10, ApprovalOperations.ExportApprovalReport }
+                    { 10, ApprovalOperations.ExportApprovalReport },
+                    { 11, ApprovalOperations.GetApprovalList }
                 };
 
                 
