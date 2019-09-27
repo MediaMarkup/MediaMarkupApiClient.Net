@@ -1,4 +1,5 @@
-﻿using MediaMarkup.Api.Models;
+﻿using MediaMarkup.Api.Data;
+using MediaMarkup.Api.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -334,6 +335,45 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             await _apiClient.Approvals.ResetApprovalGroupUserDecisions(parameters);
             Console.WriteLine("Successfully reset user decesion");
+        }
+
+        public async Task UpdateApprovalGroupUserDecision()
+        {
+            Printer.PrintStepTitle("Updates Existing User Decision");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            var approval = await _apiClient.Approvals.Get(id);
+            Printer.PrintApproval(approval);
+
+            Console.Write("Enter Approval Group Id:");
+            string groupId = Console.ReadLine();
+
+            Console.Write("Enter User Id:");
+            string userId = Console.ReadLine();
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+            Console.WriteLine("Enter Decision");
+            Console.WriteLine("All Possible Values: None, NotApproved, Approved");
+            string decisionInput = Console.ReadLine();
+            Enum.TryParse(decisionInput, true, out ApproverDecision decision);
+
+            var parameters = new ApprovalGroupUserDecisionParameters
+            {
+                Id = id,
+                ApprovalGroupId = groupId,
+                UserId = userId,
+                Version = version,
+                Decision = decision
+            };
+
+            await _apiClient.Approvals.SetApprovalGroupUserDecision(parameters);
+            Console.WriteLine("Successfully set user decesion");
         }
     }
 

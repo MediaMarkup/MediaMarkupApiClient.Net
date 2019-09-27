@@ -334,7 +334,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task SetApprovalGroupUserDecision(ApprovalGroupUserDecisionParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/SetApprovalGroupUserDecision/", parameters);
+            var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}/decisions", parameters);
 
             if (!response.IsSuccessStatusCode)
             {
