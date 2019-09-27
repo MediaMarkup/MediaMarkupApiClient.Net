@@ -312,7 +312,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task RemoveApprovalGroupUser(ApprovalGroupRemoveUserParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/RemoveApprovalGroupUser/", parameters);
+            var response = await ApiClient.DeleteAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}?version={parameters.Version}");
 
             if (!response.IsSuccessStatusCode)
             {

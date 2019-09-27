@@ -269,6 +269,39 @@ namespace MediaMarkup.TestRunner.NetFramework
             await _apiClient.Approvals.UpsertApprovalGroupUser(parameters);
             Console.WriteLine("Successfully added user to approval group");
         }
+
+        public async Task DeleteApprovalGroupUser()
+        {
+            Printer.PrintStepTitle("Deletes Existing User From Approval Group");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            var approval = await _apiClient.Approvals.Get(id);
+            Printer.PrintApproval(approval);
+
+            Console.Write("Enter Approval Group Id:");
+            string groupId = Console.ReadLine();
+
+            Console.Write("Enter User Id:");
+            string userId = Console.ReadLine();
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+            var parameters = new ApprovalGroupRemoveUserParameters
+            {
+                ApprovalGroupId = groupId,
+                Id = id,
+                UserId = userId,
+                Version = version
+            };
+
+            await _apiClient.Approvals.RemoveApprovalGroupUser(parameters);
+            Console.WriteLine("Successfully removed user from approval group");
+        }
     }
 
 
