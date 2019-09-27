@@ -66,7 +66,8 @@ namespace MediaMarkup.TestRunner.NetFramework
                     { 14, ApprovalOperations.UpsertApprovalGroupUser },
                     { 15, ApprovalOperations.DeleteApprovalGroupUser },
                     { 16, ApprovalOperations.ResetApprovalGroupUserDecision },
-                    { 17, ApprovalOperations.UpdateApprovalGroupUserDecision }
+                    { 17, ApprovalOperations.UpdateApprovalGroupUserDecision },
+                    { 18, ApprovalOperations.CreateApprovalGroup }
                 };
 
 
@@ -110,26 +111,6 @@ namespace MediaMarkup.TestRunner.NetFramework
                     }
                 }
                 while (operationSelected != -1);
-                //GetApprovals();
-                //UpdateApproval();
-                //ExportReport();
-
-
-                //CreateApprovalVersion();
-                //DeleteApprovalVersion();
-
-                //CreateApprovalGroup();
-                //UpdateApprovalGroup();
-
-                //UpsertApprovalGroupUser();
-                //UpdateApprovalGroupUserDecision();
-                //ResetApprovalGroupUserDecision();
-                //DeleteApprovalGroupUser();
-
-                //ResetApprovalGroupDecision();
-
-                //DeleteApproval();
-                //DeleteUser();  
 
                 Console.WriteLine("\n!!!!!!!!!!!!!!!!!!!");
                 Console.WriteLine("End of drive...Press any key to close the program.");

@@ -52,7 +52,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             if (id == "-1") return;
 
-            Console.WriteLine($"Reading approval {id}..");
+            Console.WriteLine($"Getting approval {id}..");
             var approval = await _apiClient.Approvals.Get(id);
 
             Printer.PrintApproval(approval);
@@ -230,6 +230,7 @@ namespace MediaMarkup.TestRunner.NetFramework
             string versionInput = Console.ReadLine();
             int.TryParse(versionInput, out int version);
 
+            Console.WriteLine("Deleting version...");
             var result = await _apiClient.Approvals.DeleteVersion(id, version);
             Console.WriteLine($"Successfully deleted {version}...");
         }
@@ -267,6 +268,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Version = version
             };
 
+            Console.WriteLine("Adding user...");
             await _apiClient.Approvals.UpsertApprovalGroupUser(parameters);
             Console.WriteLine("Successfully added user to approval group");
         }
@@ -300,6 +302,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Version = version
             };
 
+            Console.WriteLine("Removing user...");
             await _apiClient.Approvals.RemoveApprovalGroupUser(parameters);
             Console.WriteLine("Successfully removed user from approval group");
         }
@@ -333,6 +336,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Version = version
             };
 
+            Console.WriteLine("Resetting decisions...");
             await _apiClient.Approvals.ResetApprovalGroupUserDecisions(parameters);
             Console.WriteLine("Successfully reset user decesion");
         }
@@ -372,8 +376,41 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Decision = decision
             };
 
+            Console.WriteLine("Updating decisions...");
             await _apiClient.Approvals.SetApprovalGroupUserDecision(parameters);
             Console.WriteLine("Successfully set user decesion");
+        }
+
+        public async Task CreateApprovalGroup()
+        {
+            Printer.PrintStepTitle("Creates New Approval Group");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+            Console.Write("Enter Group Name:");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter Number of Decisions Required:");
+            string numberOfDecisionsInput = Console.ReadLine();
+            int.TryParse(numberOfDecisionsInput, out int numberOfDecisions);
+
+            var parameters = new ApprovalGroupCreateParameters
+            {
+                ApprovalId = id,
+                Name = name,
+                NumberOfDecisionsRequired = numberOfDecisions,
+                Version = version
+            };
+
+            Console.WriteLine("Creating group...");
+            var _ = await _apiClient.Approvals.AddApprovalGroup(parameters);
+            Console.WriteLine($"Successfully created approval group {name}");
         }
     }
 
