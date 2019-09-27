@@ -337,7 +337,7 @@ namespace MediaMarkup.TestRunner.NetFramework
             };
 
             Console.WriteLine("Resetting decisions...");
-            await _apiClient.Approvals.ResetApprovalGroupUserDecisions(parameters);
+            await _apiClient.Approvals.ResetApprovalGroupUserDecision(parameters);
             Console.WriteLine("Successfully reset user decesion");
         }
 
@@ -446,7 +446,35 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             Console.WriteLine("Updating group...");
             var _ = await _apiClient.Approvals.UpdateApprovalGroup(parameters);
-            Console.WriteLine($"Successfully created approval group {name}");
+            Console.WriteLine($"Successfully updated approval group {name}");
+        }
+
+        public async Task ResetAllApprovalGroupDecisions()
+        {
+            Printer.PrintStepTitle("Resets All User Decisions Of Approval Group");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.Write("Enter Approval Group ID:");
+            string groupId = Console.ReadLine();
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+            Console.WriteLine("Resetting decisions...");
+
+            var parameters = new ApprovalGroupUserParameters
+            {
+                Id = id,
+                ApprovalGroupId = groupId,
+                Version = version
+            };
+
+            await _apiClient.Approvals.ResetAllApprovalGroupUserDecisions(parameters);
+            Console.WriteLine($"Successfully reset approval group decisions.");
         }
     }
 

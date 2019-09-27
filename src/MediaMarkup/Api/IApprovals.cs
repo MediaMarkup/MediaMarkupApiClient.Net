@@ -153,7 +153,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task ResetApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters);
+        Task ResetAllApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters);
 
         /// <summary>
         /// Sets an approval group user decision
@@ -161,6 +161,13 @@ namespace MediaMarkup.Api
         /// <param name="parameters"></param>
         /// <returns></returns>
         Task SetApprovalGroupUserDecision(ApprovalGroupUserDecisionParameters parameters);
+
+        /// <summary>
+        /// Reset user's decision in of the given approval group
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task ResetApprovalGroupUserDecision(ApprovalGroupUserParameters parameters);
 
         /// <summary>
         /// Sets the approval version as locked or unlocked

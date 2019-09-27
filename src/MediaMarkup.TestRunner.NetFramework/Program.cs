@@ -68,7 +68,8 @@ namespace MediaMarkup.TestRunner.NetFramework
                     { 16, ApprovalOperations.ResetApprovalGroupUserDecision },
                     { 17, ApprovalOperations.UpdateApprovalGroupUserDecision },
                     { 18, ApprovalOperations.CreateApprovalGroup },
-                    { 19, ApprovalOperations.UpdateApprovalGroup }
+                    { 19, ApprovalOperations.UpdateApprovalGroup },
+                    { 20, ApprovalOperations.ResetAllApprovalGroupDecisions }
                 };
 
 

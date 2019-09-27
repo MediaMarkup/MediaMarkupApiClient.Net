@@ -334,7 +334,17 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task ResetApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters)
+        public async Task ResetAllApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters)
+        {
+            var response = await ApiClient.DeleteAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/decisions?version={parameters.Version}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException("Approvals.ResetApprovalGroupUserDecisions", response.StatusCode, await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task ResetApprovalGroupUserDecision(ApprovalGroupUserParameters parameters)
         {
             var response = await ApiClient.DeleteAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}/decisions?version={parameters.Version}");
 
@@ -345,7 +355,6 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        [Obsolete("Please use UpdateApprovalGroup method", true)]
         public async Task SetApprovalGroupUserDecision(ApprovalGroupUserDecisionParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}/decisions", parameters);
