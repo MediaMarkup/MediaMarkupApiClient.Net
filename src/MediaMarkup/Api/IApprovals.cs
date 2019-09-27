@@ -83,6 +83,14 @@ namespace MediaMarkup.Api
         Task<ApprovalCreateVersionResult> CreateVersion(string filename, byte[] fileContent, ApprovalCreateVersionParameters parameters);
 
         /// <summary>
+        /// Deletes a version of approval
+        /// </summary>
+        /// <param name="approvalId">Approval ID</param>
+        /// <param name="version">Version Number</param>
+        /// <returns></returns>
+        Task<bool> DeleteVersion(string approvalId, int version);
+
+        /// <summary>
         /// Creates the personal url for the specified user, approvalId & version (specify compare approval id and vesion to view comparison)
         /// </summary>
         /// <param name="parameters"></param>

@@ -216,6 +216,22 @@ namespace MediaMarkup.TestRunner.NetFramework
             var approvalResult = await _apiClient.Approvals.CreateVersion(filePath, parameters);
             Console.WriteLine($"New approval created:{approvalResult.Id} - Version {approvalResult.Version}");
         }
+
+        public async Task DeleteApprovalVersion()
+        {
+            Printer.PrintStepTitle("Deletes An Existing Version Of An Existing Approval");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+            var result = await _apiClient.Approvals.DeleteVersion(id, version);
+            Console.WriteLine($"Successfully deleted {version}...");
+        }
     }
 
 

@@ -225,6 +225,18 @@ namespace MediaMarkup.Api
             }
         }
 
+        public async Task<bool> DeleteVersion(string approvalId, int version)
+        {
+            var response = await ApiClient.DeleteAsync($"/approvals/{approvalId}/versions/{version}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            throw new ApiException("Approvals.DeleteVersion", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
         /// <inheritdoc />
         public async Task<PersonalUrlCreateResult> CreatePersonalUrl(PersonalUrlCreateParameters parameters)
         {
