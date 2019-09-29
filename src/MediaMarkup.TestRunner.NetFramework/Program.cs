@@ -18,11 +18,11 @@ namespace MediaMarkup.TestRunner.NetFramework
             Console.WriteLine("This is a sample console app to drive MediaMarkup API");
 
             Console.WriteLine("--------");
-            //Console.Write("Enter your Client ID:");
-            string clientId = "C04F6E4281E34F9DB3FB14093FE3F8DE"; //Console.ReadLine();
+            Console.Write("Enter your Client ID:");
+            string clientId = Console.ReadLine();
 
-            //Console.Write("Enter your Client Secret:");
-            string clientScret = "03347DAA-A6AE-4F42-87C5-20D5A779368A"; //Console.ReadLine();
+            Console.Write("Enter your Client Secret:");
+            string clientScret = Console.ReadLine();
 
             var settings = new Settings
             {
