@@ -476,6 +476,34 @@ namespace MediaMarkup.TestRunner.NetFramework
             await _apiClient.Approvals.ResetAllApprovalGroupUserDecisions(parameters);
             Console.WriteLine($"Successfully reset approval group decisions.");
         }
+
+        public async Task CreatePersonalUrl()
+        {
+            Printer.PrintStepTitle("Creates Purl");
+            Console.Write("Enter Approval ID:");
+            string id = Console.ReadLine();
+
+            if (id == "-1") return;
+
+            Console.Write("Enter Approval Version:");
+            string versionInput = Console.ReadLine();
+            int.TryParse(versionInput, out int version);
+
+            Console.Write("Enter User ID:");
+            string userId = Console.ReadLine();
+
+
+            var parameters = new PersonalUrlCreateParameters
+            {
+                ApprovalId = id,
+                Version = version,
+                UserId = userId
+            };
+
+            Console.WriteLine("Creating PURL...");
+            var purl = await _apiClient.Approvals.CreatePersonalUrl(parameters);
+            Console.WriteLine($"Successfully created URL: {purl.Url}");
+        }
     }
 
 

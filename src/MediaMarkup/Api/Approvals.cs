@@ -240,7 +240,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<PersonalUrlCreateResult> CreatePersonalUrl(PersonalUrlCreateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/CreatePersonalUrl/", parameters);
+            var response = await ApiClient.PostAsJsonAsync("purls/", parameters);
 
             if (response.IsSuccessStatusCode)
             {
