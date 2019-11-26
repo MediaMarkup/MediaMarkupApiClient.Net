@@ -6,11 +6,12 @@ namespace MediaMarkup.Api
     public interface IUsers
     {
         /// <summary>
-        /// Creates a user with the specified parameters.
+        /// Invites a new user with the specified parameters.
+        /// User received an invitation email with expiry to complete account creation and password
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task<User> Create(UserCreateParameters parameters);
+        Task<UserInvitation> Create(UserCreateParameters parameters);
 
         /// <summary>
         /// Gets a user by the specified id.
@@ -33,7 +34,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task<User> Update(UserUpdateParameters parameters);
+        Task<User> Update(string id, UserUpdateParameters parameters);
 
         /// <summary>
         /// Updates the specified user's password.

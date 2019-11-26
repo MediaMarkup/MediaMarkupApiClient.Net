@@ -6,11 +6,6 @@ namespace MediaMarkup.Api.Models
     public class ApprovalUpdateParameters
     {
         /// <summary>
-        /// Approval Id
-        /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
         /// Approval Owner User Id
         /// </summary>
         [JsonProperty("ownerUserId")]

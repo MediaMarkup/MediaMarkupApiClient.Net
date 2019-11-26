@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaMarkup.Api.Models;
 
@@ -42,7 +42,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task Update(ApprovalUpdateParameters parameters);
+        Task<Approval> Update(string id, ApprovalUpdateParameters parameters);
 
         /// <summary>
         /// Updates the Approval OwnerUserId
@@ -83,6 +83,14 @@ namespace MediaMarkup.Api
         Task<ApprovalCreateVersionResult> CreateVersion(string filename, byte[] fileContent, ApprovalCreateVersionParameters parameters);
 
         /// <summary>
+        /// Deletes a version of approval
+        /// </summary>
+        /// <param name="approvalId">Approval ID</param>
+        /// <param name="version">Version Number</param>
+        /// <returns></returns>
+        Task<bool> DeleteVersion(string approvalId, int version);
+
+        /// <summary>
         /// Creates the personal url for the specified user, approvalId & version (specify compare approval id and vesion to view comparison)
         /// </summary>
         /// <param name="parameters"></param>
@@ -103,14 +111,21 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task<ApprovalGroupCreateResult> AddApprovalGroup(ApprovalGroupCreateParameters parameters);
+        Task<bool> AddApprovalGroup(ApprovalGroupCreateParameters parameters);
+
+        /// <summary>
+        /// Updates existing approval group of the specified approval
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task<bool> UpdateApprovalGroup(ApprovalGroupUpdateParameters parameters);
 
         /// <summary>
         /// Adds an approval group user to the specified approval version
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task AddApprovalGroupUser(ApprovalGroupUserParameters parameters);
+        Task UpsertApprovalGroupUser(ApprovalGroupUserParameters parameters);
 
         /// <summary>
         /// Adds multiple approval group users to the specified approval version
@@ -138,7 +153,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task ResetApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters);
+        Task ResetAllApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters);
 
         /// <summary>
         /// Sets an approval group user decision
@@ -146,6 +161,13 @@ namespace MediaMarkup.Api
         /// <param name="parameters"></param>
         /// <returns></returns>
         Task SetApprovalGroupUserDecision(ApprovalGroupUserDecisionParameters parameters);
+
+        /// <summary>
+        /// Reset user's decision in of the given approval group
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task ResetApprovalGroupUserDecision(ApprovalGroupUserParameters parameters);
 
         /// <summary>
         /// Sets the approval version as locked or unlocked

@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using MediaMarkup.Api.Models;
 using MediaMarkup.Core;
+using Newtonsoft.Json;
 
 namespace MediaMarkup.Api
 {
@@ -16,13 +18,13 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task<User> Create(UserCreateParameters parameters)
+        public async Task<UserInvitation> Create(UserCreateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Users/Create/", parameters);
+            var response = await ApiClient.PostAsJsonAsync("users/invitations", parameters);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsJsonAsync<User>();
+                return await response.Content.ReadAsJsonAsync<UserInvitation>();
             }
 
             throw new ApiException("Users.Create", response.StatusCode, await response.Content.ReadAsStringAsync());
@@ -31,7 +33,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<User> GetById(string id, bool throwExceptionIfNull = false)
         {
-            var response = await ApiClient.GetAsync($"Users/GetById?id={id}");
+            var response = await ApiClient.GetAsync($"users/{id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -49,7 +51,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<User> GetByEmail(string email, bool throwExceptionIfNull = false)
         {
-            var response = await ApiClient.GetAsync($"Users/GetByEmail/?email={WebUtility.UrlEncode(email)}");
+            var response = await ApiClient.GetAsync($"users/email/{WebUtility.UrlEncode(email)}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -65,32 +67,28 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task<User> Update(UserUpdateParameters parameters)
+        public async Task<User> Update(string id, UserUpdateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Users/Update/", parameters);
+            var response = await ApiClient.PutAsJsonAsync($"users/{id}", parameters);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsJsonAsync<User>();
+                return await GetById(id);
             }
 
             throw new ApiException("Users.Update", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
+        [Obsolete("This method is not supported. Please use Update method", true)]
         public async Task UpdatePassword(UserUpdatePasswordParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Users/UpdatePassword/", parameters);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApiException("Users.UpdatePassword", response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+            throw new NotImplementedException("Please use Update method. This method is obsolete");
         }
 
         /// <inheritdoc />
         public async Task Delete(string id, bool throwExceptionIfError = true)
         {
-            var response = await ApiClient.DeleteAsync($"Users/Delete/?id={id}");
+            var response = await ApiClient.DeleteAsync($"users/{id}");
 
             if (!response.IsSuccessStatusCode && throwExceptionIfError)
             {

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using MediaMarkup.Api.Models;
 using MediaMarkup.Core;
@@ -25,7 +26,8 @@ namespace MediaMarkup.Api
         /// <returns><see cref="ApprovalListResult"/></returns>
         public async Task<ApprovalListResult> GetList(ApprovalListRequestParameters parameters)
         {
-            var response = await ApiClient.GetAsync($"Approvals/GetList/?{parameters.ToQueryStringValues()}");
+            var filterQuery = $"limit={parameters.ResultsPerPage}&currentPage={parameters.Page}&searchTerm={parameters.TextFilter}&ownerId={parameters.UserIdFilter}&status={parameters.Status}&sortDirection={parameters.SortDirection}&sortBy={parameters.SortBy}";
+            var response = await ApiClient.GetAsync($"approvals?{filterQuery}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -35,19 +37,10 @@ namespace MediaMarkup.Api
             throw new ApiException("Approvals.GetList", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<ApprovalCreateResult> Create(string filePath, ApprovalCreateParameters parameters)
-        {
-            var filename = Path.GetFileName(filePath);
-
-            var fileContent = File.ReadAllBytes(filePath);
-
-            return await Create(filename, fileContent, parameters);
-        }
-
         /// <inheritdoc />
         public async Task<Approval> Get(string id)
         {
-            var response = await ApiClient.GetAsync($"Approvals/Get/?id={id}");
+            var response = await ApiClient.GetAsync($"approvals/{id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -55,6 +48,14 @@ namespace MediaMarkup.Api
             }
 
             throw new ApiException("Approvals.Get", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+
+        public async Task<ApprovalCreateResult> Create(string filePath, ApprovalCreateParameters parameters)
+        {
+            var filename = Path.GetFileName(filePath);
+            var fileContent = File.ReadAllBytes(filePath);
+            return await Create(filename, fileContent, parameters);
         }
 
         /// <summary>
@@ -92,16 +93,18 @@ namespace MediaMarkup.Api
 
             using (var content = new MultipartFormDataContent())
             {
-                content.Add(new StreamContent(new MemoryStream(fileContent)), "file", WebUtility.UrlEncode(filename));
+                var fileFormContent = new ByteArrayContent(fileContent, 0, fileContent.Length);
+                fileFormContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "file", FileName = filename };
+                fileFormContent.Headers.ContentLength = fileContent.Length;
+
+                content.Add(fileFormContent);
 
                 var values = new[]
                 {
                     new KeyValuePair<string, string>("name", parameters.Name),
                     new KeyValuePair<string, string>("ownerUserId", parameters.OwnerUserId),
                     new KeyValuePair<string, string>("numberOfDecisionsRequired", (parameters.NumberOfDecisionsRequired ?? 0).ToString()),
-                    new KeyValuePair<string, string>("addOwnerToInitialApprovalGroup", (parameters.AddOwnerToInitialApprovalGroup ?? false).ToString()),
-                    new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? ""),
-                    new KeyValuePair<string, string>("reviewers", parameters.Reviewers.ToJson())
+                    new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? "")
                 };
 
                 foreach (var keyValuePair in values)
@@ -109,7 +112,9 @@ namespace MediaMarkup.Api
                     content.Add(new StringContent(keyValuePair.Value), $"\"{keyValuePair.Key}\"");
                 }
 
-                var response = await ApiClient.PostAsync("Approvals/Create/", content);
+
+                ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+                var response = await ApiClient.PostAsync("/approvals", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -121,47 +126,37 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task Update(ApprovalUpdateParameters parameters)
+        public async Task<Approval> Update(string id, ApprovalUpdateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/Update/", parameters);
+            var response = await ApiClient.PutAsJsonAsync($"/approvals/{id}", parameters);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                throw new ApiException("Approvals.Update", response.StatusCode, await response.Content.ReadAsStringAsync());
+                return await Get(id);
             }
+
+            throw new ApiException("Approvals.Update", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
+        [Obsolete("This method is obsolete. Use Update method.", true)]
         /// <inheritdoc />
         public async Task UpdateOwnerUserId(ApprovalUpdateOwnerUserIdParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/UpdateOwnerUserId/", parameters);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApiException("Approvals.UpdateOwnerUserId", response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+            throw new NotImplementedException("This method is obsolete.Use Update method.");
         }
 
+        [Obsolete("This method is obsolete. Use Update method.", true)]
         /// <inheritdoc />
         public async Task UpdateName(ApprovalUpdateNameParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/UpdateName/", parameters);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApiException("Approvals.UpdateName", response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+            throw new NotImplementedException("This method is obsolete.Use Update method.");
         }
 
+        [Obsolete("This method is obsolete. Use Update method.", true)]
         /// <inheritdoc />
         public async Task SetActive(ApprovalSetActiveParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/SetActive/", parameters);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ApiException("Approvals.SetActive", response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+            throw new NotImplementedException("This method is obsolete.Use Update method.");
         }
 
         /// <inheritdoc />
@@ -198,17 +193,18 @@ namespace MediaMarkup.Api
 
             using (var content = new MultipartFormDataContent())
             {
-                content.Add(new StreamContent(new MemoryStream(fileContent)), "file", WebUtility.UrlEncode(filename));
+                var fileFormContent = new ByteArrayContent(fileContent, 0, fileContent.Length);
+                fileFormContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "file", FileName = filename };
+                fileFormContent.Headers.ContentLength = fileContent.Length;
+
+                content.Add(fileFormContent);
 
                 var values = new[]
                 {
                     new KeyValuePair<string, string>("approvalId", parameters.ApprovalId),
-                    new KeyValuePair<string, string>("lockPreviousVersion", parameters.LockPreviousVersion.ToString().ToLower()),
-                    new KeyValuePair<string, string>("copyApprovalGroups", parameters.CopyApprovalGroups.ToString().ToLower()),
-                    new KeyValuePair<string, string>("numberOfDecisionsRequired", (parameters.NumberOfDecisionsRequired ?? 0).ToString()),
-                    new KeyValuePair<string, string>("addOwnerToInitialApprovalGroup", (parameters.AddOwnerToInitialApprovalGroup ?? false).ToString()),
-                    new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? ""),
-                    new KeyValuePair<string, string>("reviewers", parameters.Reviewers.ToJson())
+                    new KeyValuePair<string, string>("CopyApprovalGroups", false.ToString()),
+                    new KeyValuePair<string, string>("SendNotifications", false.ToString()),
+                    new KeyValuePair<string, string>("LockPreviousVersion", false.ToString())
                 };
 
                 foreach (var keyValuePair in values)
@@ -216,7 +212,9 @@ namespace MediaMarkup.Api
                     content.Add(new StringContent(keyValuePair.Value), $"\"{keyValuePair.Key}\"");
                 }
 
-                var response = await ApiClient.PostAsync("Approvals/CreateVersion/", content);
+
+                ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+                var response = await ApiClient.PostAsync($"approvals/{parameters.ApprovalId}/versions", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -227,10 +225,22 @@ namespace MediaMarkup.Api
             }
         }
 
+        public async Task<bool> DeleteVersion(string approvalId, int version)
+        {
+            var response = await ApiClient.DeleteAsync($"/approvals/{approvalId}/versions/{version}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            throw new ApiException("Approvals.DeleteVersion", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
         /// <inheritdoc />
         public async Task<PersonalUrlCreateResult> CreatePersonalUrl(PersonalUrlCreateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/CreatePersonalUrl/", parameters);
+            var response = await ApiClient.PostAsJsonAsync("purls/", parameters);
 
             if (response.IsSuccessStatusCode)
             {
@@ -243,7 +253,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task Delete(string id)
         {
-            var response = await ApiClient.DeleteAsync($"Approvals/Delete/?id={id}");
+            var response = await ApiClient.DeleteAsync($"/approvals/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -252,22 +262,35 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task<ApprovalGroupCreateResult> AddApprovalGroup(ApprovalGroupCreateParameters parameters)
+        public async Task<bool> AddApprovalGroup(ApprovalGroupCreateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/AddApprovalGroup/", parameters);
+            var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.ApprovalId}/groups", parameters);
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsJsonAsync<ApprovalGroupCreateResult>();
+                return true;
             }
 
             throw new ApiException("Approvals.AddApprovalGroup", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
         /// <inheritdoc />
-        public async Task AddApprovalGroupUser(ApprovalGroupUserParameters parameters)
+        public async Task<bool> UpdateApprovalGroup(ApprovalGroupUpdateParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/AddApprovalGroupUser/", parameters);
+            var response = await ApiClient.PutAsJsonAsync($"/approvals/{parameters.ApprovalId}/groups", parameters);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            throw new ApiException("Approvals.AddApprovalGroup", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+        /// <inheritdoc />
+        public async Task UpsertApprovalGroupUser(ApprovalGroupUserParameters parameters)
+        {
+            var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users", parameters);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -275,6 +298,7 @@ namespace MediaMarkup.Api
             }
         }
 
+        [Obsolete("Apiv2 doesn't support batch approval group user import. Contact support for more details.", true)]
         /// <inheritdoc />
         public async Task AddApprovalGroupUsers(ApprovalGroupUsersParameters parameters)
         {
@@ -286,6 +310,7 @@ namespace MediaMarkup.Api
             }
         }
 
+        [Obsolete("Please use UpsertApprovalGroupUser method", true)]
         /// <inheritdoc />
         public async Task UpdateApprovalGroupUser(ApprovalGroupUserParameters parameters)
         {
@@ -300,7 +325,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task RemoveApprovalGroupUser(ApprovalGroupRemoveUserParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/RemoveApprovalGroupUser/", parameters);
+            var response = await ApiClient.DeleteAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}?version={parameters.Version}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -309,9 +334,19 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task ResetApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters)
+        public async Task ResetAllApprovalGroupUserDecisions(ApprovalGroupUserParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/ResetApprovalGroupUserDecisions/", parameters);
+            var response = await ApiClient.DeleteAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/decisions?version={parameters.Version}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException("Approvals.ResetApprovalGroupUserDecisions", response.StatusCode, await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task ResetApprovalGroupUserDecision(ApprovalGroupUserParameters parameters)
+        {
+            var response = await ApiClient.DeleteAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}/decisions?version={parameters.Version}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -322,7 +357,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task SetApprovalGroupUserDecision(ApprovalGroupUserDecisionParameters parameters)
         {
-            var response = await ApiClient.PostAsJsonAsync("Approvals/SetApprovalGroupUserDecision/", parameters);
+            var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.Id}/groups/{parameters.ApprovalGroupId}/users/{parameters.UserId}/decisions", parameters);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -331,6 +366,7 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        [Obsolete("Please use UpdateApprovalGroup method", true)]
         public async Task SetApprovalVersionLock(ApprovalVersionLockParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync("Approvals/SetApprovalVersionLock/", parameters);
@@ -342,6 +378,7 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        [Obsolete("Please use UpdateApprovalGroup method", true)]
         public async Task SetApprovalGroupEnabled(ApprovalGroupSetEnabledParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync("Approvals/SetApprovalGroupEnabled/", parameters);
@@ -353,6 +390,7 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        [Obsolete("Please use UpdateApprovalGroup method", true)]
         public async Task SetApprovalGroupReadonly(ApprovalGroupSetReadOnlyParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync("Approvals/SetApprovalGroupReadonly/", parameters);
@@ -366,7 +404,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<byte[]> ExportAnnotationReport(ExportReportParameters parameters)
         {
-            var response =  await ApiClient.GetAsync($"Approvals/ExportAnnotationReport/?{parameters.ToQueryStringValues()}");
+            var response =  await ApiClient.GetAsync($"/approvals/{parameters.Id}/report?groupId={parameters.ApprovalGroupId}&version={parameters.Version}");
             
             if (response.IsSuccessStatusCode)
             {

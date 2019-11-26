@@ -17,7 +17,7 @@ namespace MediaMarkup.Api.Models
         /// <summary>
         /// Approval Version
         /// </summary>
-        [JsonProperty("version")]
+        [JsonProperty("approvalVersion")]
         public int Version { get; set; }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace MediaMarkup.Api.Models
         /// <summary>
         /// Deadline date for the group approval
         /// </summary>
-        [JsonProperty("deadline")]
+        [JsonProperty("deadlineDate")]
         public DateTime? Deadline { get; set; }
     }
 }

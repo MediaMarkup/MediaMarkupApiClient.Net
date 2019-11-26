@@ -19,7 +19,7 @@ namespace MediaMarkup
                 }
                 case HttpStatusCode.BadRequest:
                 {
-                    var message = string.Empty;
+                    var message = responseContent;
                     try
                     {
                         var errorResult = JsonConvert.DeserializeObject<ErrorResult>(responseContent);
