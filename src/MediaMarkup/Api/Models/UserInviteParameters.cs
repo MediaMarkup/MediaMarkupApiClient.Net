@@ -1,19 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace MediaMarkup.Api.Models
 {
     /// <summary>
-    /// User Creation Parameters
+    /// User Invitation Parameters
     /// </summary>
-    public class UserCreateParameters
+    public class UserInviteParameters
     {
         /// <summary>
         /// User Create Parameters
         /// </summary>
-        public UserCreateParameters()
+        public UserInviteParameters()
         {
             FirstName = string.Empty;
             LastName = string.Empty;
@@ -39,22 +37,9 @@ namespace MediaMarkup.Api.Models
         public string EmailAddress { get; set; }
 
         /// <summary>
-        /// Password (min 6 characteres)
-        /// </summary>
-        [JsonProperty("Password")]
-        public string Password { get; set; }
-
-        /// <summary>
         /// Specifies the User Role, Administrator, Manager, Reviewer
         /// </summary>
         [JsonProperty("role")]
         public string Role { get; set; }
-
-        /// <summary>
-        /// Enables Login via mediamarkup.com Portal
-        /// Otherwise user can only access via PURL created using API integration
-        /// </summary>
-        [JsonProperty("webLoginEnabled")]
-        public bool WebLoginEnabled { get; set; }
     }
 }
