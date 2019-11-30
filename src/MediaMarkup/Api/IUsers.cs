@@ -11,7 +11,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task<UserInvitation> Create(UserCreateParameters parameters);
+        Task<UserInvitation> Invite(UserInviteParameters parameters);
 
         /// <summary>
         /// Gets a user by the specified id.

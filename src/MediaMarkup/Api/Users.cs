@@ -18,7 +18,7 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
-        public async Task<UserInvitation> Create(UserCreateParameters parameters)
+        public async Task<UserInvitation> Invite(UserInviteParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync("users/invitations", parameters);
 
@@ -27,7 +27,7 @@ namespace MediaMarkup.Api
                 return await response.Content.ReadAsJsonAsync<UserInvitation>();
             }
 
-            throw new ApiException("Users.Create", response.StatusCode, await response.Content.ReadAsStringAsync());
+            throw new ApiException("Users.Invite", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
         /// <inheritdoc />

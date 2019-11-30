@@ -30,7 +30,7 @@ namespace MediaMarkup.TestRunner.NetFramework
             Console.Write($"Enter role ({string.Join(",", UserRole.Roles)}):");
             string role = Console.ReadLine();
 
-            var parameters = new UserCreateParameters
+            var parameters = new UserInviteParameters
             {
                 EmailAddress = email,
                 FirstName = firstName,
@@ -38,7 +38,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Role = role
             };
 
-            var invitation = await _apiClient.Users.Create(parameters);
+            var invitation = await _apiClient.Users.Invite(parameters);
             Console.WriteLine($"{firstName} {lastName} has been invited. Following URL is sent in the invitation e-mail");
             Console.WriteLine(invitation.Url);
         }
