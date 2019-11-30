@@ -120,11 +120,16 @@ namespace MediaMarkup.TestRunner.NetFramework
             Console.Write("Enter New Password (min 6 characters):");
             string newPassword = Console.ReadLine();
 
+            Console.Write($"Set If User Can Login via mediamarkup.com (true / false):");
+            string webLoginInput = Console.ReadLine();
+            bool.TryParse(webLoginInput, out bool webLoginEnabled);
+
             var parameters = new UserUpdateParameters
             {
                 FirstName = newName,
                 LastName = newLastName,
-                Password = newPassword
+                Password = newPassword,
+                WebLoginEnabled = webLoginEnabled
             };
 
             var updatedUser = await _apiClient.Users.Update(id, parameters);

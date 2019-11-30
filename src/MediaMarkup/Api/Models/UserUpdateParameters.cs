@@ -34,5 +34,12 @@ namespace MediaMarkup.Api.Models
         /// </summary>
         [JsonProperty("password")]
         public string Password { get; set; }
+
+        /// <summary>
+        /// Enables Login via mediamarkup.com Portal
+        /// Otherwise user can only access via PURL created using API integration
+        /// </summary>
+        [JsonProperty("webLoginEnabled")]
+        public bool WebLoginEnabled { get; set; }
     }
 }
