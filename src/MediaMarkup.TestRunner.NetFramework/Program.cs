@@ -49,6 +49,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
                 var programOperations = new Dictionary<int, Func<Task>>
                 {
+                    { 0, UserOperations.CreateUser },
                     { 1, UserOperations.InviteUser },
                     { 2, UserOperations.GetUserByEmail },
                     { 3, UserOperations.GetUserById },

@@ -18,6 +18,19 @@ namespace MediaMarkup.Api
         }
 
         /// <inheritdoc />
+        public async Task<User> Create(UserCreateParameters parameters)
+        {
+            var response = await ApiClient.PostAsJsonAsync("users/", parameters);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsJsonAsync<User>();
+            }
+
+            throw new ApiException("Users.Create", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+        /// <inheritdoc />
         public async Task<UserInvitation> Invite(UserInviteParameters parameters)
         {
             var response = await ApiClient.PostAsJsonAsync("users/invitations", parameters);
@@ -95,5 +108,7 @@ namespace MediaMarkup.Api
                 throw new ApiException("Users.Delete", response.StatusCode, await response.Content.ReadAsStringAsync());
             }
         }
+
+        
     }
 }

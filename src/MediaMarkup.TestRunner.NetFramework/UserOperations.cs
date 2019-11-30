@@ -13,6 +13,47 @@ namespace MediaMarkup.TestRunner.NetFramework
             _apiClient = apiClient;
         }
 
+        internal async Task CreateUser()
+        {
+            Printer.PrintStepTitle("Create User");
+            Console.Write("Enter an email address to invite:");
+            string email = Console.ReadLine();
+
+            if (email == "-1") return;
+
+            Console.Write("Enter first name:");
+            string firstName = Console.ReadLine();
+
+            Console.Write("Enter last name:");
+            string lastName = Console.ReadLine();
+
+            Console.Write($"Enter role ({string.Join(",", UserRole.Roles)}):");
+            string role = Console.ReadLine();
+
+            Console.Write($"Enter password (min 6 characters):");
+            string password = Console.ReadLine();
+
+            Console.Write($"Set If User Can Login via mediamarkup.com (true / false):");
+            string webLoginInput = Console.ReadLine();
+            bool.TryParse(webLoginInput, out bool webLoginEnabled);
+
+
+            var parameters = new UserCreateParameters
+            {
+                EmailAddress = email,
+                FirstName = firstName,
+                LastName = lastName,
+                Role = role,
+                Password = password,
+                WebLoginEnabled = webLoginEnabled
+            };
+
+            var user = await _apiClient.Users.Create(parameters);
+            Console.WriteLine($"{firstName} {lastName} has created.");
+
+            Printer.PrintUser(user);
+        }
+
         internal async Task InviteUser()
         {
             Printer.PrintStepTitle("User Invitation");
