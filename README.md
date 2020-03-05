@@ -10,9 +10,9 @@ This library is still in development nad subject to change a fair amount until v
 
 ### 1.0.0-CI00001 Preview Changes
 
-1. [UserCreateParameters](https://github.com/MediaMarkup/MediaMarkupApiClient.Net/blob/master/src/MediaMarkup/Api/Models/UserCreateParameters.cs#L51)`UserRole` is renamed to `Role`
-1. `AddApprovalGroupUser` is renamed to `UpsertApprovalGroupUser`
-1. `ApprovalGroupUserParameters` doesn't support `AllowVersionSelection` payload parameter in this version. It is under development.
+1. In [UserCreateParameters](https://github.com/MediaMarkup/MediaMarkupApiClient.Net/blob/master/src/MediaMarkup/Api/Models/UserCreateParameters.cs#L51) payload `UserRole` property is renamed to `Role`
+1. `AddApprovalGroupUser` method is renamed to [UpsertApprovalGroupUser](https://github.com/MediaMarkup/MediaMarkupApiClient.Net/blob/master/src/MediaMarkup/Api/IApprovals.cs#L128)
+1. [ApprovalGroupUserParameters](https://github.com/MediaMarkup/MediaMarkupApiClient.Net/blob/master/src/MediaMarkup/Api/Models/ApprovalGroupUserParameters.cs) payload doesn't support `AllowVersionSelection` parameter in this version. **It is under development.**
 
 ## MediaMarkup API
 
