@@ -111,7 +111,7 @@ namespace MediaMarkup.Api
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task<bool> AddApprovalGroup(ApprovalGroupCreateParameters parameters);
+        Task<ApprovalGroupCreateResult> AddApprovalGroup(ApprovalGroupCreateParameters parameters);
 
         /// <summary>
         /// Updates existing approval group of the specified approval
