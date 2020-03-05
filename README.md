@@ -6,6 +6,16 @@
 
 This library is still in development nad subject to change a fair amount until version 1.0.0.0.
 
+## Breaking Changes 
+
+### 1.0.0-CI00001 Preview Changes
+
+**UserCreateParameters**
+
+1. `UserRole` is renamed to `Role`
+1. `AddApprovalGroupUser` is renamed to `UpsertApprovalGroupUser`
+1. `ApprovalGroupUserParameters` doesn't support `AllowVersionSelection` payload parameter in this version. It is under development.
+
 ## MediaMarkup API
 
 ### API Endpoint & Manual testing
