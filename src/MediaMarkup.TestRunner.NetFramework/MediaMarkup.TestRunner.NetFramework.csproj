@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="ApprovalOperations.cs" />
     <Compile Include="EndToEndTesting.cs" />
+    <Compile Include="EndToEndUserTesting.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

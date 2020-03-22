@@ -11,6 +11,11 @@ namespace MediaMarkup.TestRunner.NetFramework
             Console.WriteLine($"\n{title}\n-------------");
         }
 
+        internal static void Print(string message)
+        {
+            Console.WriteLine(message);
+        }
+
         internal static void PrintUser(User user)
         {
             if (user == null)
