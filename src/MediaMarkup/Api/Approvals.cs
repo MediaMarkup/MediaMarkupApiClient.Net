@@ -101,7 +101,7 @@ namespace MediaMarkup.Api
 
                 var values = new[]
                 {
-                    new KeyValuePair<string, string>("name", parameters.Name),
+                    new KeyValuePair<string, string>("description", parameters.Name),
                     new KeyValuePair<string, string>("ownerUserId", parameters.OwnerUserId),
                     new KeyValuePair<string, string>("numberOfDecisionsRequired", (parameters.NumberOfDecisionsRequired ?? 0).ToString()),
                     new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? "")
