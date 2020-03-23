@@ -14,6 +14,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
         private TestContainer _testContainer;
         private EndToEndUserTesting _userTesting;
+        private EndToEndApprovalTesting _approvalTesting;
 
         internal EndToEndTesting(ApiClient apiClient)
         {
@@ -21,6 +22,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             _testContainer = new TestContainer();
             _userTesting = new EndToEndUserTesting(_apiClient, _testContainer);
+            _approvalTesting = new EndToEndApprovalTesting(_apiClient, _testContainer);
         }
 
         private async Task Cleanup()
@@ -30,12 +32,20 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             await _apiClient.Users.Delete(_testContainer.User.Id, true);
 
+            Printer.PrintStepTitle("Delete Existing Approval");
+
+            Printer.Print("Deleting approval...");
+            await _apiClient.Approvals.Delete(_testContainer.Approval.Id);
+
+            Printer.Print($"Approval deleted!");
+
             Printer.Print("End of test....");
         }
 
         public async Task RunEndToEndTest()
         {
             await _userTesting.Run();
+            await _approvalTesting.Run();
 
             await Cleanup();
         }

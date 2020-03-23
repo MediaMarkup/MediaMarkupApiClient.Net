@@ -27,6 +27,7 @@ namespace MediaMarkup.Api
         public async Task<ApprovalListResult> GetList(ApprovalListRequestParameters parameters)
         {
             var filterQuery = $"limit={parameters.ResultsPerPage}&currentPage={parameters.Page}&searchTerm={parameters.TextFilter}&ownerId={parameters.UserIdFilter}&status={parameters.Status}&sortDirection={parameters.SortDirection}&sortBy={parameters.SortBy}";
+            filterQuery = WebUtility.UrlEncode(filterQuery);
             var response = await ApiClient.GetAsync($"approvals?{filterQuery}");
 
             if (response.IsSuccessStatusCode)
