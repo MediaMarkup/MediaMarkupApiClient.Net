@@ -26,7 +26,7 @@ namespace MediaMarkup.TestRunner.NetFramework
             _interactiveMode = new InteractiveMode(InteractiveModeEnabled);
             _testContainer = new TestContainer();
             _userTesting = new EndToEndUserTesting(_apiClient, _testContainer, _interactiveMode);
-            _approvalTesting = new EndToEndApprovalTesting(_apiClient, _testContainer);
+            _approvalTesting = new EndToEndApprovalTesting(_apiClient, _testContainer, _interactiveMode);
         }
 
         private async Task Cleanup()

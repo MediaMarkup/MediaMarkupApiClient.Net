@@ -41,7 +41,6 @@ namespace MediaMarkup.TestRunner.NetFramework
             _interactiveMode.Run();
         }
 
-
         private async Task CreateUser()
         {
             Printer.PrintStepTitle("Creating new user...");

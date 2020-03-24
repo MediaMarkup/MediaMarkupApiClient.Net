@@ -12,11 +12,13 @@ namespace MediaMarkup.TestRunner.NetFramework
     {
         private readonly ApiClient _apiClient;
         private readonly TestContainer _testContainer;
+        private readonly InteractiveMode _interactiveMode;
 
-        internal EndToEndApprovalTesting(ApiClient apiClient, TestContainer testContainer)
+        internal EndToEndApprovalTesting(ApiClient apiClient, TestContainer testContainer, InteractiveMode interactiveMode)
         {
             _apiClient = apiClient;
             _testContainer = testContainer;
+            _interactiveMode = interactiveMode;
         }
 
         internal async Task Run()
@@ -24,46 +26,76 @@ namespace MediaMarkup.TestRunner.NetFramework
             await CreateApproval();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await GetApproval();
             Printer.PrintApproval(_testContainer.Approval);
+
+            _interactiveMode.Run();
 
             await UpdateApproval();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await GetApproval();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await GetApprovalList();
+
+            _interactiveMode.Run();
 
             await CreateApprovalVersion();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await CreateApprovalGroup();
             Printer.PrintApproval(_testContainer.Approval);
+
+            _interactiveMode.Run();
 
             await UpdateApprovalGroup();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await UpsertApprovalGroupUser();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await UpdateApprovalGroupUserDecision();
             Printer.PrintApproval(_testContainer.Approval);
+
+            _interactiveMode.Run();
 
             await ResetApprovalGroupUserDecision();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await UpdateApprovalGroupUserDecision();
             Printer.PrintApproval(_testContainer.Approval);
+
+            _interactiveMode.Run();
 
             await ResetAllApprovalGroupDecisions();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await DeleteApprovalGroupUser();
             Printer.PrintApproval(_testContainer.Approval);
 
+            _interactiveMode.Run();
+
             await DeleteApprovalVersion();
             Printer.PrintApproval(_testContainer.Approval);
+
+            _interactiveMode.Run();
 
             await ExportApprovalReport();
 
