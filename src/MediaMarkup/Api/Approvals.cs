@@ -27,6 +27,7 @@ namespace MediaMarkup.Api
         public async Task<ApprovalListResult> GetList(ApprovalListRequestParameters parameters)
         {
             var filterQuery = $"limit={parameters.ResultsPerPage}&currentPage={parameters.Page}&searchTerm={parameters.TextFilter}&ownerId={parameters.UserIdFilter}&status={parameters.Status}&sortDirection={parameters.SortDirection}&sortBy={parameters.SortBy}";
+            filterQuery = WebUtility.UrlEncode(filterQuery);
             var response = await ApiClient.GetAsync($"approvals?{filterQuery}");
 
             if (response.IsSuccessStatusCode)
@@ -101,7 +102,7 @@ namespace MediaMarkup.Api
 
                 var values = new[]
                 {
-                    new KeyValuePair<string, string>("name", parameters.Name),
+                    new KeyValuePair<string, string>("description", parameters.Name),
                     new KeyValuePair<string, string>("ownerUserId", parameters.OwnerUserId),
                     new KeyValuePair<string, string>("numberOfDecisionsRequired", (parameters.NumberOfDecisionsRequired ?? 0).ToString()),
                     new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? "")

@@ -12,6 +12,7 @@ namespace MediaMarkup.TestRunner.NetFramework
     {
         static UserOperations UserOperations;
         static ApprovalOperations ApprovalOperations;
+        static EndToEndTesting EndToEndTesting;
 
         async static Task Main(string[] args)
         {
@@ -26,7 +27,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             var settings = new Settings
             {
-                ApiBaseUrl = "https://localhost:44318",
+                ApiBaseUrl = "https://api.mmapprovals.com/",
                 ClientId = clientId,
                 SecretKey = clientScret
             };
@@ -46,6 +47,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
                 UserOperations = new UserOperations(apiClient);
                 ApprovalOperations = new ApprovalOperations(apiClient);
+                EndToEndTesting = new EndToEndTesting(apiClient);
 
                 var programOperations = new Dictionary<int, Func<Task>>
                 {
@@ -71,7 +73,8 @@ namespace MediaMarkup.TestRunner.NetFramework
                     { 18, ApprovalOperations.CreateApprovalGroup },
                     { 19, ApprovalOperations.UpdateApprovalGroup },
                     { 20, ApprovalOperations.ResetAllApprovalGroupDecisions },
-                    { 21, ApprovalOperations.CreatePersonalUrl }
+                    { 21, ApprovalOperations.CreatePersonalUrl },
+                    { 99, EndToEndTesting.RunEndToEndTest }
                 };
 
 
@@ -128,7 +131,5 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Console.WriteLine("!!!!!!!!!!!!!!!!!!!");
             }
         }
-
-
     }
 }
