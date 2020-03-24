@@ -65,6 +65,7 @@
     <Compile Include="EndToEndApprovalTesting.cs" />
     <Compile Include="EndToEndTesting.cs" />
     <Compile Include="EndToEndUserTesting.cs" />
+    <Compile Include="InteractiveMode.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

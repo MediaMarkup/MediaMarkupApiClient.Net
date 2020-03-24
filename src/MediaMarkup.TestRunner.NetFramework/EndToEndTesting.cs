@@ -15,13 +15,17 @@ namespace MediaMarkup.TestRunner.NetFramework
         private TestContainer _testContainer;
         private EndToEndUserTesting _userTesting;
         private EndToEndApprovalTesting _approvalTesting;
+        private InteractiveMode _interactiveMode;
+
+        private const bool InteractiveModeEnabled = true;
 
         internal EndToEndTesting(ApiClient apiClient)
         {
             _apiClient = apiClient;
 
+            _interactiveMode = new InteractiveMode(InteractiveModeEnabled);
             _testContainer = new TestContainer();
-            _userTesting = new EndToEndUserTesting(_apiClient, _testContainer);
+            _userTesting = new EndToEndUserTesting(_apiClient, _testContainer, _interactiveMode);
             _approvalTesting = new EndToEndApprovalTesting(_apiClient, _testContainer);
         }
 

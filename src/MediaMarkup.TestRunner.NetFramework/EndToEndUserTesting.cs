@@ -9,11 +9,13 @@ namespace MediaMarkup.TestRunner.NetFramework
     {
         private readonly ApiClient _apiClient;
         private readonly TestContainer _testContainer;
+        private readonly InteractiveMode _interactiveMode;
 
-        internal EndToEndUserTesting(ApiClient apiClient, TestContainer testContainer)
+        internal EndToEndUserTesting(ApiClient apiClient, TestContainer testContainer, InteractiveMode interactiveMode)
         {
             _apiClient = apiClient;
             _testContainer = testContainer;
+            _interactiveMode = interactiveMode;
         }
 
         internal async Task Run()
@@ -21,14 +23,22 @@ namespace MediaMarkup.TestRunner.NetFramework
             await CreateUser();
             Printer.PrintUser(_testContainer.User);
 
+            _interactiveMode.Run();
+
             await GetUserById();
             Printer.PrintUser(_testContainer.User);
+
+            _interactiveMode.Run();
 
             await UpdateUser();
             Printer.PrintUser(_testContainer.User);
 
+            _interactiveMode.Run();
+
             await GetUserByEmail();
             Printer.PrintUser(_testContainer.User);
+
+            _interactiveMode.Run();
         }
 
 
