@@ -5,71 +5,40 @@ using System.Threading.Tasks;
 
 namespace MediaMarkup.TestRunner.NetFramework
 {
-    internal class EndToEndUserTesting
+    public static class EndToEndUserTesting
     {
-        private readonly ApiClient _apiClient;
-        private readonly TestContainer _testContainer;
-        private readonly InteractiveMode _interactiveMode;
+        public static ApiClient ApiClient;
+        public static TestContainer TestContainer;
 
-        internal EndToEndUserTesting(ApiClient apiClient, TestContainer testContainer, InteractiveMode interactiveMode)
-        {
-            _apiClient = apiClient;
-            _testContainer = testContainer;
-            _interactiveMode = interactiveMode;
-        }
-
-        internal async Task Run()
-        {
-            await CreateUser();
-            Printer.PrintUser(_testContainer.User);
-
-            _interactiveMode.Run();
-
-            await GetUserById();
-            Printer.PrintUser(_testContainer.User);
-
-            _interactiveMode.Run();
-
-            await UpdateUser();
-            Printer.PrintUser(_testContainer.User);
-
-            _interactiveMode.Run();
-
-            await GetUserByEmail();
-            Printer.PrintUser(_testContainer.User);
-
-            _interactiveMode.Run();
-        }
-
-        private async Task CreateUser()
+        public static async Task CreateUser()
         {
             Printer.PrintStepTitle("Creating new user...");
 
             var payload = new UserCreateParameters
             {
-                EmailAddress = _testContainer.User.EmailAddress,
-                FirstName = _testContainer.User.FirstName,
-                LastName = _testContainer.User.LastName,
+                EmailAddress = TestContainer.User.EmailAddress,
+                FirstName = TestContainer.User.FirstName,
+                LastName = TestContainer.User.LastName,
                 Password = Guid.NewGuid().ToString(),
-                Role = _testContainer.User.Role,
-                WebLoginEnabled = _testContainer.User.WebLoginEnabled
+                Role = TestContainer.User.Role,
+                WebLoginEnabled = TestContainer.User.WebLoginEnabled
             };
 
-            var userCreated = await _apiClient.Users.Create(payload);
+            var userCreated = await ApiClient.Users.Create(payload);
             Printer.Print($"New user created!");
 
-            _testContainer.UpdateUser(userCreated);
+            TestContainer.UpdateUser(userCreated);
         }
 
-        private async Task GetUserById()
+        public static async Task GetUserById()
         {
-            Printer.PrintStepTitle($"Getting user details by id {_testContainer.User.Id}...");
+            Printer.PrintStepTitle($"Getting user details by id {TestContainer.User.Id}...");
 
-            var _ = await _apiClient.Users.GetById(_testContainer.User.Id, true);
+            var _ = await ApiClient.Users.GetById(TestContainer.User.Id, true);
             Printer.Print($"User found!");
         }
 
-        private async Task UpdateUser()
+        public static async Task UpdateUser()
         {
             Printer.PrintStepTitle("Updating user...");
 
@@ -81,21 +50,21 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Password = Guid.NewGuid().ToString()
             };
 
-            var updatedUser = await _apiClient.Users.Update(_testContainer.User.Id, payload);
+            var updatedUser = await ApiClient.Users.Update(TestContainer.User.Id, payload);
 
             Assert.AreEqual(payload.FirstName, updatedUser.FirstName);
             Assert.AreEqual(payload.LastName, updatedUser.LastName);
             Assert.AreEqual(payload.WebLoginEnabled, updatedUser.WebLoginEnabled);
             Printer.Print("User updated!");
 
-            _testContainer.UpdateUser(updatedUser);
+            TestContainer.UpdateUser(updatedUser);
         }
 
-        private async Task GetUserByEmail()
+        public static async Task GetUserByEmail()
         {
             Printer.PrintStepTitle("Getting user by email...");
 
-            var _ = await _apiClient.Users.GetByEmail(_testContainer.User.EmailAddress, true);
+            var _ = await ApiClient.Users.GetByEmail(TestContainer.User.EmailAddress, true);
         }
     }
 }

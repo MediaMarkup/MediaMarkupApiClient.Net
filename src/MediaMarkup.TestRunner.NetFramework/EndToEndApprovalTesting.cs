@@ -8,101 +8,57 @@ using System.Threading.Tasks;
 
 namespace MediaMarkup.TestRunner.NetFramework
 {
-    internal class EndToEndApprovalTesting
+    public static class EndToEndApprovalTesting
     {
-        private readonly ApiClient _apiClient;
-        private readonly TestContainer _testContainer;
-        private readonly InteractiveMode _interactiveMode;
+        public static ApiClient ApiClient;
+        public static TestContainer TestContainer;
 
-        internal EndToEndApprovalTesting(ApiClient apiClient, TestContainer testContainer, InteractiveMode interactiveMode)
+        public static async Task SetApprovalGroupReadOnly()
         {
-            _apiClient = apiClient;
-            _testContainer = testContainer;
-            _interactiveMode = interactiveMode;
+            Printer.PrintStepTitle("Setting Approval Group Readonly");
+
+            var parameters = new ApprovalGroupSetReadOnlyParameters
+            {
+                ApprovalGroupId = TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
+                Id = TestContainer.Approval.Id,
+                Readonly = true,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
+            };
+
+            await ApiClient.Approvals.SetApprovalGroupReadonly(parameters);
         }
 
-        internal async Task Run()
+        public static async Task SetApprovalVersionLock()
         {
-            await CreateApproval();
-            Printer.PrintApproval(_testContainer.Approval);
+            Printer.PrintStepTitle("Locking Approval");
 
-            _interactiveMode.Run();
+            var parameters = new ApprovalVersionLockParameters
+            {
+                Id = TestContainer.Approval.Id,
+                Locked = true,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
+            };
 
-            await GetApproval();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await UpdateApproval();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await GetApproval();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await GetApprovalList();
-
-            _interactiveMode.Run();
-
-            await CreateApprovalVersion();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await CreateApprovalGroup();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await UpdateApprovalGroup();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await UpsertApprovalGroupUser();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await UpdateApprovalGroupUserDecision();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await ResetApprovalGroupUserDecision();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await UpdateApprovalGroupUserDecision();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await ResetAllApprovalGroupDecisions();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await DeleteApprovalGroupUser();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await DeleteApprovalVersion();
-            Printer.PrintApproval(_testContainer.Approval);
-
-            _interactiveMode.Run();
-
-            await ExportApprovalReport();
-
-            await CreatePersonalUrl();
+            Printer.Print("Locking....");
+            await ApiClient.Approvals.SetApprovalVersionLock(parameters);
         }
 
-        private async Task CreateApproval()
+        public static async Task SetApprovalVersionUnLock()
+        {
+            Printer.PrintStepTitle("Unlocking Approval");
+
+            var parameters = new ApprovalVersionLockParameters
+            {
+                Id = TestContainer.Approval.Id,
+                Locked = false,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
+            };
+
+            Printer.Print("Locking....");
+            await ApiClient.Approvals.SetApprovalVersionLock(parameters);
+        }
+
+        public static async Task CreateApproval()
         {
             Printer.PrintStepTitle("Uploads A Dummpy PDF For Approval");
 
@@ -113,12 +69,12 @@ namespace MediaMarkup.TestRunner.NetFramework
             {
                 Name = "Test Approval",
                 NumberOfDecisionsRequired = random.Next(1, 10),
-                OwnerUserId = _testContainer.User.Id,
+                OwnerUserId = TestContainer.User.Id,
             };
 
             Printer.Print("Creating new approval...");
 
-            var approvalResult = await _apiClient.Approvals.Create(filePath, requestParameters);
+            var approvalResult = await ApiClient.Approvals.Create(filePath, requestParameters);
             Printer.Print($"New approval created:{approvalResult.Id}");
 
             var approval = new Approval 
@@ -126,20 +82,20 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Id = approvalResult.Id
             };
 
-            _testContainer.SetApproval(approval);
+            TestContainer.SetApproval(approval);
         }
 
-        private async Task GetApproval()
+        public static async Task GetApproval()
         {
             Printer.PrintStepTitle("Get Approval Details");
 
-            var approval = await _apiClient.Approvals.Get(_testContainer.Approval.Id);
+            var approval = await ApiClient.Approvals.Get(TestContainer.Approval.Id);
             Printer.Print("Approval found!");
 
-            _testContainer.SetApproval(approval);
+            TestContainer.SetApproval(approval);
         }
 
-        private async Task UpdateApproval()
+        public static async Task UpdateApproval()
         {
             Printer.PrintStepTitle("Update Existing Approval");
 
@@ -147,30 +103,30 @@ namespace MediaMarkup.TestRunner.NetFramework
             {
                 Active = true,
                 Name = "Updated Test Approval",
-                OwnerUserId = _testContainer.User.Id
+                OwnerUserId = TestContainer.User.Id
             };
 
             Printer.Print($"Updating approval...");
 
-            var approval = await _apiClient.Approvals.Update(_testContainer.Approval.Id, parameters);
+            var approval = await ApiClient.Approvals.Update(TestContainer.Approval.Id, parameters);
             Printer.Print("Approval updated!");
 
-            _testContainer.SetApproval(approval);
+            TestContainer.SetApproval(approval);
         }
 
-        private async Task ExportApprovalReport()
+        public static async Task ExportApprovalReport()
         {
             Printer.PrintStepTitle("Export Report Of An Existing Approval");
 
             var parameters = new ExportReportParameters
             {
-                ApprovalGroupId = _testContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
-                Id = _testContainer.Approval.Id,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version
+                ApprovalGroupId = TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
+                Id = TestContainer.Approval.Id,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
             };
 
             Printer.Print("Exporting report...");
-            var result = await _apiClient.Approvals.ExportAnnotationReport(parameters);
+            var result = await ApiClient.Approvals.ExportAnnotationReport(parameters);
 
             Printer.Print($"Saving export file ({result.Length})...");
 
@@ -182,7 +138,7 @@ namespace MediaMarkup.TestRunner.NetFramework
             Printer.Print($"Saved to ${reportPath}");
         }
 
-        private async Task GetApprovalList()
+        public static async Task GetApprovalList()
         {
             Printer.PrintStepTitle("List and Filter Approvals");
 
@@ -193,15 +149,15 @@ namespace MediaMarkup.TestRunner.NetFramework
                 Page = 1,
                 SortBy = SortBy.Status,
                 SortDirection = SortDirection.Desc,
-                TextFilter = _testContainer.Approval.Name,
-                UserIdFilter = _testContainer.User.Id,
+                TextFilter = TestContainer.Approval.Name,
+                UserIdFilter = TestContainer.User.Id,
                 Status = Status.All
             };
-            var approvalListResult = await _apiClient.Approvals.GetList(parameters);
+            var approvalListResult = await ApiClient.Approvals.GetList(parameters);
             approvalListResult.Approvals.ForEach(approval => Printer.PrintApproval(approval));
         }
 
-        private async Task CreateApprovalVersion()
+        public static async Task CreateApprovalVersion()
         {
             Printer.PrintStepTitle("Creates A New Version Of An Existing Approval");
 
@@ -209,27 +165,27 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             var parameters = new ApprovalCreateVersionParameters
             {
-                ApprovalId = _testContainer.Approval.Id,
+                ApprovalId = TestContainer.Approval.Id,
                 NumberOfDecisionsRequired = 3,
             };
 
             Console.WriteLine("Creating new approval...");
 
-            var approvalResult = await _apiClient.Approvals.CreateVersion(filePath, parameters);
+            var approvalResult = await ApiClient.Approvals.CreateVersion(filePath, parameters);
             Printer.Print($"New approval created:{approvalResult.Id} - Version {approvalResult.Version}");
         }
 
-        private async Task DeleteApprovalVersion()
+        public static async Task DeleteApprovalVersion()
         {
             Printer.PrintStepTitle("Deletes An Existing Version Of An Existing Approval");
 
             Console.WriteLine("Deleting version...");
-            var result = await _apiClient.Approvals.DeleteVersion(_testContainer.Approval.Id, _testContainer.Approval.Versions.LastOrDefault().Version);
+            var result = await ApiClient.Approvals.DeleteVersion(TestContainer.Approval.Id, TestContainer.Approval.Versions.LastOrDefault().Version);
             
             Printer.Print($"Successfully deleted ({result})...");
         }
 
-        private async Task UpsertApprovalGroupUser()
+        public static async Task UpsertApprovalGroupUser()
         {
             Printer.PrintStepTitle("Upserts Existing User to Approval Group");
 
@@ -237,140 +193,140 @@ namespace MediaMarkup.TestRunner.NetFramework
             {
                 AllowDecision = true,
                 AllowDownload = true,
-                ApprovalGroupId = _testContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
+                ApprovalGroupId = TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
                 CommentsEnabled = true,
                 Enabled = true,
-                Id = _testContainer.Approval.Id,
-                UserId = _testContainer.RandomUserId,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version
+                Id = TestContainer.Approval.Id,
+                UserId = TestContainer.RandomUserId,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
             };
 
             Printer.Print("Adding user...");
 
-            await _apiClient.Approvals.UpsertApprovalGroupUser(parameters);
+            await ApiClient.Approvals.UpsertApprovalGroupUser(parameters);
 
             Printer.Print("Successfully added user to approval group");
         }
 
-        private async Task DeleteApprovalGroupUser()
+        public static async Task DeleteApprovalGroupUser()
         {
             Printer.PrintStepTitle("Deletes Existing User From Approval Group");
 
             var parameters = new ApprovalGroupRemoveUserParameters
             {
-                ApprovalGroupId = _testContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
-                Id = _testContainer.Approval.Id,
-                UserId = _testContainer.User.Id,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version
+                ApprovalGroupId = TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
+                Id = TestContainer.Approval.Id,
+                UserId = TestContainer.RandomUserId,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
             };
 
             Printer.Print("Removing user...");
-            await _apiClient.Approvals.RemoveApprovalGroupUser(parameters);
+            await ApiClient.Approvals.RemoveApprovalGroupUser(parameters);
 
             Printer.Print("Successfully removed user from approval group");
         }
 
-        private async Task ResetApprovalGroupUserDecision()
+        public static async Task ResetApprovalGroupUserDecision()
         {
             Printer.PrintStepTitle("Resets Existing User Decision");
 
             var parameters = new ApprovalGroupUserParameters
             {
-                Id = _testContainer.Approval.Id,
-                ApprovalGroupId = _testContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
-                UserId = _testContainer.RandomUserId,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version
+                Id = TestContainer.Approval.Id,
+                ApprovalGroupId = TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
+                UserId = TestContainer.RandomUserId,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
             };
 
             Printer.Print("Resetting decisions...");
-            await _apiClient.Approvals.ResetApprovalGroupUserDecision(parameters);
+            await ApiClient.Approvals.ResetApprovalGroupUserDecision(parameters);
 
             Printer.Print("Successfully reset user decesion");
         }
 
-        private async Task UpdateApprovalGroupUserDecision()
+        public static async Task UpdateApprovalGroupUserDecision()
         {
             Printer.PrintStepTitle("Updates Existing User Decision");
 
             var parameters = new ApprovalGroupUserDecisionParameters
             {
-                Id = _testContainer.Approval.Id,
-                ApprovalGroupId = _testContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
-                UserId = _testContainer.RandomUserId,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version,
+                Id = TestContainer.Approval.Id,
+                ApprovalGroupId = TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
+                UserId = TestContainer.RandomUserId,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version,
                 Decision = Api.Data.ApproverDecision.Approved
             };
 
             Printer.Print("Updating decisions...");
 
-            await _apiClient.Approvals.SetApprovalGroupUserDecision(parameters);
+            await ApiClient.Approvals.SetApprovalGroupUserDecision(parameters);
             Printer.Print("Successfully set user decesion");
         }
 
-        private async Task CreateApprovalGroup()
+        public static async Task CreateApprovalGroup()
         {
             Printer.PrintStepTitle("Creates New Approval Group");
 
             var parameters = new ApprovalGroupCreateParameters
             {
-                ApprovalId = _testContainer.Approval.Id,
+                ApprovalId = TestContainer.Approval.Id,
                 Name = "Test Group",
                 NumberOfDecisionsRequired = 3,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
             };
 
             Printer.Print("Creating group...");
 
-            var _ = await _apiClient.Approvals.AddApprovalGroup(parameters);
+            var _ = await ApiClient.Approvals.AddApprovalGroup(parameters);
             Printer.Print($"Successfully created approval group!");
         }
 
-        private async Task UpdateApprovalGroup()
+        public static async Task UpdateApprovalGroup()
         {
             Printer.PrintStepTitle("Updating group...");
 
             var parameters = new ApprovalGroupUpdateParameters
             {
-                ApprovalId = _testContainer.Approval.Id,
-                ApprovalGroupId = _testContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
+                ApprovalId = TestContainer.Approval.Id,
+                ApprovalGroupId = TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
                 Name = "Updated group",
                 NumberOfDecisionsRequired = 5,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
             };
 
             
-            var _ = await _apiClient.Approvals.UpdateApprovalGroup(parameters);
+            var _ = await ApiClient.Approvals.UpdateApprovalGroup(parameters);
             Printer.Print($"Successfully updated approval group!");
         }
 
-        private async Task ResetAllApprovalGroupDecisions()
+        public static async Task ResetAllApprovalGroupDecisions()
         {
             Printer.PrintStepTitle("Resets All User Decisions Of Approval Group");
             
             var parameters = new ApprovalGroupUserParameters
             {
-                Id = _testContainer.Approval.Id,
-                ApprovalGroupId = _testContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version
+                Id = TestContainer.Approval.Id,
+                ApprovalGroupId = TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.FirstOrDefault().Id,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version
             };
 
-            await _apiClient.Approvals.ResetAllApprovalGroupUserDecisions(parameters);
+            await ApiClient.Approvals.ResetAllApprovalGroupUserDecisions(parameters);
             Printer.Print($"Successfully reset approval group decisions.");
         }
 
-        private async Task CreatePersonalUrl()
+        public static async Task CreatePersonalUrl()
         {
             Printer.PrintStepTitle("Creates Purl");
 
             var parameters = new PersonalUrlCreateParameters
             {
-                ApprovalId = _testContainer.Approval.Id,
-                Version = _testContainer.Approval.Versions.FirstOrDefault().Version,
-                UserId = _testContainer.User.Id
+                ApprovalId = TestContainer.Approval.Id,
+                Version = TestContainer.Approval.Versions.FirstOrDefault().Version,
+                UserId = TestContainer.User.Id
             };
 
             Printer.Print("Creating PURL...");
-            var purl = await _apiClient.Approvals.CreatePersonalUrl(parameters);
+            var purl = await ApiClient.Approvals.CreatePersonalUrl(parameters);
 
             Printer.Print($"Successfully created URL: {purl.Url}");
         }
