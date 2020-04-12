@@ -3,7 +3,7 @@ using System;
 
 namespace MediaMarkup.TestRunner.NetFramework
 {
-    internal class TestContainer
+    public class TestContainer
     {
         internal User User { private set; get; }
 
