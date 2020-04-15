@@ -42,5 +42,11 @@ namespace MediaMarkup.Api.Models
         /// </summary>
         [JsonProperty("observer")]
         public bool? Observer { get; set; }
+
+        /// <summary>
+        /// Allow Approval Note Moderation
+        /// </summary>
+        [JsonProperty("allowNoteModeration")]
+        public bool AllowNoteModeration { get; set; }
     }
 }
