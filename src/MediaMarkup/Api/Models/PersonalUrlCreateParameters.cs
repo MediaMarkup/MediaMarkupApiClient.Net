@@ -18,6 +18,12 @@ namespace MediaMarkup.Api.Models
         /// </summary>
         [JsonProperty("approvalId")]
         public string ApprovalId { get; set; }
+        
+        /// <summary>
+        /// Approval Group Id to review
+        /// </summary>
+        [JsonProperty("approvalGroupId")]
+        public string ApprovalGroupId { get; set; }
 
         /// <summary>
         /// Approval Version to review

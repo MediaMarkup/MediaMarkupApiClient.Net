@@ -241,3 +241,7 @@ Projects/App.Tests/appsettings.json
 src/MediaMarkup.Tests/appsettings.Development.json
 src/MediaMarkup.Tests/appsettings.json
 src/MediaMarkup.Tests/testsettings.json
+
+.idea/.idea.MediaMarkupApiClient/.idea/
+
+.idea/.idea.MediaMarkupApiClient/riderModule.iml
