@@ -285,6 +285,19 @@ namespace MediaMarkup.Api
             throw new ApiException("Approvals.AddApprovalGroup", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
 
+        public async Task<Approval> CreateApprovalGroups(CreateApprovalGroupsParameters parameters)
+        {
+            var response = await ApiClient.PostAsJsonAsync($"/approvals/{parameters.ApprovalId}/groups/batch", parameters);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var approval = await response.Content.ReadAsJsonAsync<Approval>();
+                return approval;
+            }
+
+            throw new ApiException("Approvals.CreateApprovalGroups", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
         /// <inheritdoc />
         public async Task<bool> UpdateApprovalGroup(ApprovalGroupUpdateParameters parameters)
         {

@@ -277,7 +277,15 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             Printer.Print("Creating group...");
 
-            var _ = await ApiClient.Approvals.AddApprovalGroup(parameters);
+            var approvalGroupCreateResult = await ApiClient.Approvals.AddApprovalGroup(parameters);
+            var approvalGroup = new ApprovalGroup
+            {
+                Id = approvalGroupCreateResult.ApprovalGroupId,
+                Name = parameters.Name,
+                NumberOfDecisionsRequired = parameters.NumberOfDecisionsRequired.Value
+            };
+            
+            TestContainer.Approval.Versions.FirstOrDefault().ApprovalGroups.Add(approvalGroup);
             Printer.Print($"Successfully created approval group!");
         }
 
@@ -297,6 +305,57 @@ namespace MediaMarkup.TestRunner.NetFramework
             
             var _ = await ApiClient.Approvals.UpdateApprovalGroup(parameters);
             Printer.Print($"Successfully updated approval group!");
+        }
+
+        public static async Task CreateApprovalGroups()
+        {
+            Printer.PrintStepTitle("Creates New Approval Group");
+
+            var parameters = new CreateApprovalGroupsParameters
+            {
+                ApprovalId = TestContainer.Approval.Id,
+                ApprovalVersion = TestContainer.Approval.Versions.FirstOrDefault().Version,
+                ApprovalGroups = new List<CreateApprovalGroupBatchItem>
+                {
+                    new CreateApprovalGroupBatchItem
+                    {
+                        Name = Guid.NewGuid().ToString(),
+                        NumberOfDecisionsRequired = 1,
+                        Users = new List<ApprovalGroupUser>
+                        {
+                            new ApprovalGroupUser
+                            {
+                                UserId = Guid.NewGuid().ToString()
+                            },
+                            new ApprovalGroupUser
+                            {
+                                UserId = Guid.NewGuid().ToString()
+                            }
+                        }
+                    },
+                    new CreateApprovalGroupBatchItem
+                    {
+                        Name = Guid.NewGuid().ToString(),
+                        NumberOfDecisionsRequired = 1,
+                        Users = new List<ApprovalGroupUser>
+                        {
+                            new ApprovalGroupUser
+                            {
+                                UserId = Guid.NewGuid().ToString()
+                            },
+                            new ApprovalGroupUser
+                            {
+                                UserId = Guid.NewGuid().ToString()
+                            }
+                        }
+                    }
+                }
+            };
+            
+            Printer.Print("Creating groups...");
+
+            var _ = await ApiClient.Approvals.CreateApprovalGroups(parameters);
+            Printer.Print($"Successfully created approval groups!");
         }
 
         public static async Task ResetAllApprovalGroupDecisions()

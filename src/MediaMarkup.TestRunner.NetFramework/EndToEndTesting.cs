@@ -49,6 +49,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 { EndToEndApprovalTesting.UpdateApprovalGroupUserDecision },
                 { EndToEndApprovalTesting.ResetApprovalGroupUserDecision },
                 { EndToEndApprovalTesting.UpdateApprovalGroupUserDecision },
+                { EndToEndApprovalTesting.CreateApprovalGroups },
                 { EndToEndApprovalTesting.ExportApprovalReport },
                 { EndToEndApprovalTesting.CreatePersonalUrl },
                 { EndToEndApprovalTesting.ResetAllApprovalGroupDecisions },
@@ -78,18 +79,26 @@ namespace MediaMarkup.TestRunner.NetFramework
 
         public async Task RunEndToEndTest()
         {
-            foreach (var program in _programOperations)
+            try
             {
-                PrintProgress();
-                Console.WriteLine("Press enter to continue");
-                Console.ReadLine();
-                await program();
-                Console.WriteLine("Press enter to continue");
-                Console.ReadLine();
-                _currentStep++;
-            }
+                foreach (var program in _programOperations)
+                {
+                    PrintProgress();
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
+                    await program();
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
+                    _currentStep++;
+                }
             
-            await Cleanup();
+                await Cleanup();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                await Cleanup();
+            }
         }
 
         private void PrintProgress()

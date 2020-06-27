@@ -449,6 +449,11 @@ namespace MediaMarkup.TestRunner.NetFramework
             Console.WriteLine($"Successfully updated approval group {name}");
         }
 
+        public async Task CreateApprovalGroups()
+        {
+            
+        }
+
         public async Task ResetAllApprovalGroupDecisions()
         {
             Printer.PrintStepTitle("Resets All User Decisions Of Approval Group");

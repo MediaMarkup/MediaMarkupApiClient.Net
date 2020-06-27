@@ -27,7 +27,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             var settings = new Settings
             {
-                ApiBaseUrl = "https://api.mmapprovals.com/",
+                ApiBaseUrl = "https://api.mediamarkup.com/",
                 ClientId = clientId,
                 SecretKey = clientScret
             };
@@ -72,8 +72,9 @@ namespace MediaMarkup.TestRunner.NetFramework
                     { 17, ApprovalOperations.UpdateApprovalGroupUserDecision },
                     { 18, ApprovalOperations.CreateApprovalGroup },
                     { 19, ApprovalOperations.UpdateApprovalGroup },
-                    { 20, ApprovalOperations.ResetAllApprovalGroupDecisions },
-                    { 21, ApprovalOperations.CreatePersonalUrl },
+                    { 20, ApprovalOperations.CreateApprovalGroups },
+                    { 21, ApprovalOperations.ResetAllApprovalGroupDecisions },
+                    { 22, ApprovalOperations.CreatePersonalUrl },
                     { 99, EndToEndTesting.RunEndToEndTest }
                 };
 
