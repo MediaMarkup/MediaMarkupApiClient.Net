@@ -45,6 +45,9 @@ namespace MediaMarkup.Api.Models
         [JsonProperty("deadlineDate")]
         public DateTime? Deadline { get; set; }
         
+        [JsonProperty(PropertyName = "enabled")]
+        public bool Enabled { get; set; }
+        
         /// <summary>
         /// Users added to the approval group
         /// </summary>

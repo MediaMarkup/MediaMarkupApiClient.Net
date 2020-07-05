@@ -321,15 +321,20 @@ namespace MediaMarkup.TestRunner.NetFramework
                     {
                         Name = Guid.NewGuid().ToString(),
                         NumberOfDecisionsRequired = 1,
+                        Enabled = true,
                         Users = new List<ApprovalGroupUser>
                         {
                             new ApprovalGroupUser
                             {
-                                UserId = Guid.NewGuid().ToString()
+                                UserId = Guid.NewGuid().ToString(),
                             },
                             new ApprovalGroupUser
                             {
-                                UserId = Guid.NewGuid().ToString()
+                                UserId = Guid.NewGuid().ToString(),
+                                Enabled = true,
+                                AllowDecision = true,
+                                AllowDownload = true,
+                                CommentsEnabled = true
                             }
                         }
                     },
