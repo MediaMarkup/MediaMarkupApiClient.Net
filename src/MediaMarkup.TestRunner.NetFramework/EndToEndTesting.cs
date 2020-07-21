@@ -47,6 +47,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 { EndToEndApprovalTesting.UpdateApprovalGroup },
                 { EndToEndApprovalTesting.UpsertApprovalGroupUser },
                 { EndToEndApprovalTesting.UpdateApprovalGroupUserDecision },
+                { EndToEndApprovalTesting.GetApproval },
                 { EndToEndApprovalTesting.ResetApprovalGroupUserDecision },
                 { EndToEndApprovalTesting.UpdateApprovalGroupUserDecision },
                 { EndToEndApprovalTesting.CreateApprovalGroups },

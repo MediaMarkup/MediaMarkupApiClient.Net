@@ -34,6 +34,7 @@ namespace MediaMarkup.Api.Models
         [JsonProperty(PropertyName = "users")]
         public List<ApprovalGroupUser> Users { get; set; }
 
+        [JsonProperty(PropertyName = "approvalGroupStatusInfo")]
         public ApprovalGroupStatusInfo ApprovalGroupStatusInfo { get; set; }
 
     }
