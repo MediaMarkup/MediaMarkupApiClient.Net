@@ -19,6 +19,7 @@ namespace MediaMarkup.Api.Models
             CommentsEnabled = false;
             AllowDecision = false;
             AllowDownload = false;
+            AllowReportDownload = false;
         }
 
         /// <summary>
@@ -67,8 +68,11 @@ namespace MediaMarkup.Api.Models
         [JsonProperty("allowDownload")]
         public bool AllowDownload { get; set; }
 
-        //[JsonProperty("allowGroupView")]
-        //public bool AllowGroupView { get; set; }
+        /// <summary>
+        /// Allows the user to download the approval report
+        /// </summary>
+        [JsonProperty("allowReportDownload")]
+        public bool AllowReportDownload { get; set; }
 
         /// <summary>
         /// Enables/Disables user
