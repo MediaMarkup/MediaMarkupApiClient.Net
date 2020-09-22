@@ -17,6 +17,7 @@ namespace MediaMarkup.Api.Models
             AllowDecision = false;
             AllowDownload = false;
             AllowVersionSelection = false;
+            AllowReportDownload = false; 
             Enabled = false;
         }
 
@@ -43,6 +44,12 @@ namespace MediaMarkup.Api.Models
         /// </summary>
         [JsonProperty("allowDownload")]
         public bool AllowDownload { get; set; }
+        
+        /// <summary> 
+        /// Allows the user to download the approval report 
+        /// </summary> 
+        [JsonProperty("allowReportDownload")] 
+        public bool AllowReportDownload { get; set; } 
 
         /// <summary>
         /// Allows version selection, otherwise only the latest version will be displayed for the user
