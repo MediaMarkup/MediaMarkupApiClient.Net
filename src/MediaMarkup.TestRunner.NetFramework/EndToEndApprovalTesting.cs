@@ -418,5 +418,17 @@ namespace MediaMarkup.TestRunner.NetFramework
             Printer.Print($"Uploaded JPG to Approval Draft: {approvalDraft.Id} - Pages: {approvalDraft.PageCount}");
             TestContainer.SetApprovalDraft(approvalDraft);
         }
+
+        public static async Task DeleteApprovalDraft()
+        {
+            Printer.PrintStepTitle("Deletes Approval Draft");
+            
+            Printer.Print("Deleting Approval Draft...");
+
+            var result = await ApiClient.Approvals.DeleteApprovalDraftAsync(TestContainer.ApprovalDraft.Id);
+            
+            Printer.Print($"Deleted: {result}");
+            TestContainer.SetApprovalDraft(null);
+        }
     }
 }
