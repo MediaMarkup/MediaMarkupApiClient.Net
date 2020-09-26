@@ -437,5 +437,99 @@ namespace MediaMarkup.Api
 
             throw new ApiException("Approvals.ExportAnnotationReport", response.StatusCode, await response.Content.ReadAsStringAsync());
         }
+
+        /// <inheritdoc />
+        public async Task<ApprovalDraft> GetApprovalDraftByIdAsync(string id)
+        {
+            var response = await ApiClient.GetAsync($"/drafts/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsJsonAsync<ApprovalDraft>();
+            }
+
+            throw new ApiException("ApprovalDrafts.Get", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+        /// <inheritdoc />
+        public async Task<ApprovalDraft> CreateApprovalDraftAsync()
+        {
+            var response = await ApiClient.PostAsync($"/drafts", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsJsonAsync<ApprovalDraft>();
+            }
+
+            throw new ApiException("ApprovalDrafts.Post", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> DeleteApprovalDraftAsync(string id)
+        {
+            var response = await ApiClient.DeleteAsync($"/drafts/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsJsonAsync<bool>();
+            }
+
+            throw new ApiException("ApprovalDrafts.Delete", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+        /// <inheritdoc />
+        public async Task<ApprovalDraft> UploadFileToApprovalDraftAsync(string id, int index, string filePath)
+        {
+            var filename = Path.GetFileName(filePath);
+            var fileContent = File.ReadAllBytes(filePath);
+
+            using (var content = new MultipartFormDataContent())
+            {
+                var fileFormContent = new ByteArrayContent(fileContent, 0, fileContent.Length);
+                fileFormContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "file", FileName = filename };
+                fileFormContent.Headers.ContentLength = fileContent.Length;
+
+                content.Add(fileFormContent);
+
+                content.Add(fileFormContent);
+                content.Add(new StringContent($"{index}"), "index");
+
+                ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+                var response = await ApiClient.PutAsync($"/drafts/{id}", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsJsonAsync<ApprovalDraft>();
+                }
+
+                throw new ApiException("ApprovalDrafts.Upload", response.StatusCode, await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<ApprovalDraft> DeleteFileFromApprovalDraftAsync(string id, string fileId)
+        {
+            var response = await ApiClient.DeleteAsync($"/drafts/{id}/files/{fileId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsJsonAsync<ApprovalDraft>();
+            }
+
+            throw new ApiException("ApprovalDraftsFile.Delete", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
+
+        /// <inheritdoc />
+        public async Task<ApprovalCreateResult> PublishDraftAsync(string id, ApprovalCreateParameters parameters)
+        {
+            var response = await ApiClient.PostAsync($"/drafts/{id}/publish", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsJsonAsync<ApprovalCreateResult>();
+            }
+
+            throw new ApiException("ApprovalDraftsPublish.Post", response.StatusCode, await response.Content.ReadAsStringAsync());
+        }
     }
 }

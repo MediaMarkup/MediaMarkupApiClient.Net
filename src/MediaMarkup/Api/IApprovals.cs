@@ -197,5 +197,51 @@ namespace MediaMarkup.Api
         /// <param name="parameters"></param>
         /// <returns></returns>
         Task<byte[]> ExportAnnotationReport(ExportReportParameters parameters);
+        
+        /// <summary>
+        /// Get Approval Draft details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<ApprovalDraft> GetApprovalDraftByIdAsync(string id);
+
+        /// <summary>
+        /// Create New Approval Draft
+        /// </summary>
+        /// <returns></returns>
+        Task<ApprovalDraft> CreateApprovalDraftAsync();
+
+        /// <summary>
+        /// Delete Approval Draft
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> DeleteApprovalDraftAsync(string id);
+
+        /// <summary>
+        /// Upload New File to Approval Draft
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="index">Index of the file uploaded to the draft</param>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        Task<ApprovalDraft> UploadFileToApprovalDraftAsync(string id, int index, string filePath);
+
+        /// <summary>
+        /// Delete File from Approval Draft
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        Task<ApprovalDraft> DeleteFileFromApprovalDraftAsync(string id, string fileId);
+
+        /// <summary>
+        /// Convert Approval Draft into Approval
+        /// This is a long running operation!
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task<ApprovalCreateResult> PublishDraftAsync(string id, ApprovalCreateParameters parameters);
     }
 }
