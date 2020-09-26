@@ -394,5 +394,29 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             Printer.Print($"Successfully created URL: {purl.Url}");
         }
+
+        public static async Task CreateApprovalDraft()
+        {
+            Printer.PrintStepTitle("Creates New Approval Draft");
+            
+            Printer.Print("Creating Approval Draft...");
+            var approvalDraft = await ApiClient.Approvals.CreateApprovalDraftAsync();
+            
+            Printer.Print($"Created Approval Draft: {approvalDraft.Id}");
+            TestContainer.SetApprovalDraft(approvalDraft);
+        }
+
+        public static async Task UploadFileToApprovalDraft()
+        {
+            Printer.PrintStepTitle("Uploads New File to Approval Draft");
+            
+            Printer.Print("Uploading JPG Approval Draft...");
+            
+            var filePath = Path.Combine("mm-test-files", "test.jpg");
+            var approvalDraft = await ApiClient.Approvals.UploadFileToApprovalDraftAsync(TestContainer.ApprovalDraft.Id, 1, filePath);
+            
+            Printer.Print($"Uploaded JPG to Approval Draft: {approvalDraft.Id} - Pages: {approvalDraft.PageCount}");
+            TestContainer.SetApprovalDraft(approvalDraft);
+        }
     }
 }

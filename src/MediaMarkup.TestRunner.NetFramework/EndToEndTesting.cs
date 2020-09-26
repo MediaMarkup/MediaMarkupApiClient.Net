@@ -55,7 +55,9 @@ namespace MediaMarkup.TestRunner.NetFramework
                 { EndToEndApprovalTesting.CreatePersonalUrl },
                 { EndToEndApprovalTesting.ResetAllApprovalGroupDecisions },
                 { EndToEndApprovalTesting.DeleteApprovalGroupUser },
-                { EndToEndApprovalTesting.DeleteApprovalVersion }
+                { EndToEndApprovalTesting.DeleteApprovalVersion },
+                { EndToEndApprovalTesting.CreateApprovalDraft },
+                { EndToEndApprovalTesting.UploadFileToApprovalDraft }
             };
         }
 

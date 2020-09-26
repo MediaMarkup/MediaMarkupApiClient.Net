@@ -10,6 +10,8 @@ namespace MediaMarkup.TestRunner.NetFramework
         internal Approval Approval { private set; get; }
 
         internal string RandomUserId { private set; get; }
+        
+        internal ApprovalDraft ApprovalDraft { private set; get; }
 
         internal TestContainer()
         {
@@ -42,6 +44,11 @@ namespace MediaMarkup.TestRunner.NetFramework
         internal void SetApproval(Approval approval)
         {
             Approval = approval;
+        }
+
+        internal void SetApprovalDraft(ApprovalDraft approvalDraft)
+        {
+            ApprovalDraft = approvalDraft;
         }
     }
 }
