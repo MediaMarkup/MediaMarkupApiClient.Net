@@ -58,6 +58,7 @@ namespace MediaMarkup.TestRunner.NetFramework
                 { EndToEndApprovalTesting.DeleteApprovalVersion },
                 { EndToEndApprovalTesting.CreateApprovalDraft },
                 { EndToEndApprovalTesting.UploadFileToApprovalDraft },
+                { EndToEndApprovalTesting.PublishApprovalDraft},
                 { EndToEndApprovalTesting.DeleteApprovalDraft}
             };
         }

@@ -87,7 +87,7 @@ namespace MediaMarkup.Api
                 throw new ArgumentException("Approvals.Create: Owner not specified");
             }
 
-            if (string.IsNullOrWhiteSpace(parameters.Name))
+            if (string.IsNullOrWhiteSpace(parameters.Description))
             {
                 throw new ArgumentException("Approvals.Create: Approval name not specified");
             }
@@ -102,7 +102,7 @@ namespace MediaMarkup.Api
 
                 var values = new[]
                 {
-                    new KeyValuePair<string, string>("description", parameters.Name),
+                    new KeyValuePair<string, string>("description", parameters.Description),
                     new KeyValuePair<string, string>("ownerUserId", parameters.OwnerUserId),
                     new KeyValuePair<string, string>("numberOfDecisionsRequired", (parameters.NumberOfDecisionsRequired ?? 0).ToString()),
                     new KeyValuePair<string, string>("deadline", parameters.Deadline?.ToString("O") ?? "")
@@ -522,7 +522,7 @@ namespace MediaMarkup.Api
         /// <inheritdoc />
         public async Task<ApprovalCreateResult> PublishDraftAsync(string id, ApprovalCreateParameters parameters)
         {
-            var response = await ApiClient.PostAsync($"/drafts/{id}/publish", null);
+            var response = await ApiClient.PostAsJsonAsync($"/drafts/{id}/publish", parameters);
 
             if (response.IsSuccessStatusCode)
             {

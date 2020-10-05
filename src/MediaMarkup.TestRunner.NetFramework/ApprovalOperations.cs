@@ -1,4 +1,4 @@
-﻿using MediaMarkup.Api.Data;
+using MediaMarkup.Api.Data;
 using MediaMarkup.Api.Models;
 using System;
 using System.IO;
@@ -18,7 +18,7 @@ namespace MediaMarkup.TestRunner.NetFramework
         internal async Task CreateApproval()
         {
             Printer.PrintStepTitle("Uploads A Dummpy PDF For Approval");
-            Console.Write("Enter Name:");
+            Console.Write("Enter Description:");
             string name = Console.ReadLine();
 
             if (name == "-1") return;
@@ -34,7 +34,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             var requestParameters = new ApprovalCreateParameters
             {
-                Name = name,
+                Description = name,
                 NumberOfDecisionsRequired = numberOfDecisionsRequired,
                 OwnerUserId = ownerUserId,
             };

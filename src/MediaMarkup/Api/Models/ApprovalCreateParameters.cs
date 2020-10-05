@@ -12,7 +12,7 @@ namespace MediaMarkup.Api.Models
         public ApprovalCreateParameters()
         {
             OwnerUserId = string.Empty;
-            Name = string.Empty;
+            Description = string.Empty;
             NumberOfDecisionsRequired = 0;
             AddOwnerToInitialApprovalGroup = false;
         }
@@ -24,10 +24,10 @@ namespace MediaMarkup.Api.Models
         public string OwnerUserId { get; set; }
 
         /// <summary>
-        /// Name / Description of the approval
+        /// Description / Description of the approval
         /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("description")]
+        public string Description { get; set; }
 
         /// <summary>
         /// Number of decisions required, 0 = all users in initial approval group

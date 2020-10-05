@@ -67,7 +67,7 @@ namespace MediaMarkup.TestRunner.NetFramework
 
             var requestParameters = new ApprovalCreateParameters
             {
-                Name = "Test Approval",
+                Description = "Test Approval",
                 NumberOfDecisionsRequired = random.Next(1, 10),
                 OwnerUserId = TestContainer.User.Id,
             };
@@ -417,6 +417,23 @@ namespace MediaMarkup.TestRunner.NetFramework
             
             Printer.Print($"Uploaded JPG to Approval Draft: {approvalDraft.Id} - Pages: {approvalDraft.PageCount}");
             TestContainer.SetApprovalDraft(approvalDraft);
+        }
+        
+        public static async Task PublishApprovalDraft()
+        {
+            Printer.PrintStepTitle("Publish Approval Draft");
+            
+            Printer.Print("Publishing Approval Draft...");
+
+            var parameters = new ApprovalCreateParameters
+            {
+                Description = "approval draft testing",
+                OwnerUserId = TestContainer.RandomUserId,
+            };
+            var result = await ApiClient.Approvals.PublishDraftAsync(TestContainer.ApprovalDraft.Id, parameters);
+            
+            Printer.Print($"Published: {result.Id}");
+            TestContainer.SetApprovalDraft(null);
         }
 
         public static async Task DeleteApprovalDraft()
