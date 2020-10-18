@@ -226,6 +226,14 @@ namespace MediaMarkup.Api
         /// <param name="filePath"></param>
         /// <returns></returns>
         Task<ApprovalDraft> UploadFileToApprovalDraftAsync(string id, int index, string filePath);
+        
+        /// <summary>
+        /// Upload Multiple Files to Approval Draft
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="filePaths"></param>
+        /// <returns></returns>
+        Task<ApprovalDraft> UploadMultipleFilesToApprovalDraftAsync(string id, string[] filePaths);
 
         /// <summary>
         /// Delete File from Approval Draft

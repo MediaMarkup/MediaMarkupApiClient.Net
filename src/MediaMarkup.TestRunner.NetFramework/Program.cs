@@ -57,7 +57,6 @@ namespace MediaMarkup.TestRunner.NetFramework
                     { 3, UserOperations.GetUserById },
                     { 4, UserOperations.UpdateUser },
                     { 5, UserOperations.DeleteUserById },
-
                     { 6, ApprovalOperations.CreateApproval },
                     { 7, ApprovalOperations.GetApproval },
                     { 8, ApprovalOperations.UpdateApproval },

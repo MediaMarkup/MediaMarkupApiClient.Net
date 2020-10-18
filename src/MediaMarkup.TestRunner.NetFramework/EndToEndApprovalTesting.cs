@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MediaMarkup.TestRunner.NetFramework
@@ -413,15 +414,53 @@ namespace MediaMarkup.TestRunner.NetFramework
             Printer.Print("Uploading JPG Approval Draft...");
             
             var filePath = Path.Combine("mm-test-files", "test.jpg");
-            var approvalDraft = await ApiClient.Approvals.UploadFileToApprovalDraftAsync(TestContainer.ApprovalDraft.Id, 1, filePath);
+            var approvalDraft = await ApiClient.Approvals.UploadFileToApprovalDraftAsync(TestContainer.ApprovalDraft.Id, -1, filePath);
             
             Printer.Print($"Uploaded JPG to Approval Draft: {approvalDraft.Id} - Pages: {approvalDraft.PageCount}");
+            TestContainer.SetApprovalDraft(approvalDraft);
+        }
+        
+        public static async Task UploadMultipleFilesToApprovalDraft()
+        {
+            Printer.PrintStepTitle("Uploads Multiple Files to Approval Draft");
+
+            var files = new[]
+            {
+                Path.Combine("mm-test-files", "test.doc"),
+                Path.Combine("mm-test-files", "test.pdf"),
+                Path.Combine("mm-test-files", "test.ppt"),
+                Path.Combine("mm-test-files", "test.xls")
+            };
+            
+            Printer.Print($"Uploading {files.Length} Files to Approval Draft {TestContainer.ApprovalDraft.Id}...");
+            
+            var approvalDraft = await ApiClient.Approvals.UploadMultipleFilesToApprovalDraftAsync(TestContainer.ApprovalDraft.Id, files);
+            
+            Printer.Print($"Uploaded {files.Length} Files to Approval Draft {TestContainer.ApprovalDraft.Id} - Pages: {approvalDraft.PageCount}");
             TestContainer.SetApprovalDraft(approvalDraft);
         }
         
         public static async Task PublishApprovalDraft()
         {
             Printer.PrintStepTitle("Publish Approval Draft");
+            
+            var approvalDraft = await ApiClient.Approvals.GetApprovalDraftByIdAsync(TestContainer.ApprovalDraft.Id);
+
+            while (approvalDraft.Status != ApprovalDraftStatus.Draft)
+            {
+                Printer.Print("Checking Approval Draft Status...");
+                
+                approvalDraft = await ApiClient.Approvals.GetApprovalDraftByIdAsync(TestContainer.ApprovalDraft.Id);
+                Printer.Print("Approval Draft: " + approvalDraft.Status);
+
+                if (approvalDraft.Status == ApprovalDraftStatus.Processing)
+                {
+                    Printer.Print("Waiting 10 secs....");
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                }
+            }
+            
+            TestContainer.SetApprovalDraft(approvalDraft);
             
             Printer.Print("Publishing Approval Draft...");
 

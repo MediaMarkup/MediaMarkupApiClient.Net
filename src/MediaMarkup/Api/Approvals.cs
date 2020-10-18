@@ -485,7 +485,7 @@ namespace MediaMarkup.Api
 
             using (var content = new MultipartFormDataContent())
             {
-                var fileFormContent = new ByteArrayContent(fileContent, 0, fileContent.Length);
+                var fileFormContent = new StreamContent(new MemoryStream(fileContent));
                 fileFormContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "file", FileName = filename };
                 fileFormContent.Headers.ContentLength = fileContent.Length;
 
@@ -496,6 +496,36 @@ namespace MediaMarkup.Api
 
                 ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
                 var response = await ApiClient.PutAsync($"/drafts/{id}", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsJsonAsync<ApprovalDraft>();
+                }
+
+                throw new ApiException("ApprovalDrafts.Upload", response.StatusCode, await response.Content.ReadAsStringAsync());
+            }
+        }
+        
+        /// <inheritdoc />
+        public async Task<ApprovalDraft> UploadMultipleFilesToApprovalDraftAsync(string id, string[] filePaths)
+        {
+            using (var content = new MultipartFormDataContent())
+            {
+                for (int i = 0; i < filePaths.Length; i++)
+                {
+                    var filePath = filePaths[i];
+                    var filename = Path.GetFileName(filePath);
+                    var fileContent = File.ReadAllBytes(filePath);
+                    
+                    var fileFormContent = new StreamContent(new MemoryStream(fileContent));
+                    fileFormContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "files", FileName = filename };
+                    fileFormContent.Headers.ContentLength = fileContent.Length;
+
+                    content.Add(fileFormContent);
+                }
+
+                ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+                var response = await ApiClient.PutAsync($"/drafts/batch/{id}", content);
 
                 if (response.IsSuccessStatusCode)
                 {
