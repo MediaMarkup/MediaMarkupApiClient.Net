@@ -446,7 +446,7 @@ namespace MediaMarkup.TestRunner.NetFramework
             
             var approvalDraft = await ApiClient.Approvals.GetApprovalDraftByIdAsync(TestContainer.ApprovalDraft.Id);
 
-            while (approvalDraft.Status != ApprovalDraftStatus.Draft)
+            while (approvalDraft.Status != ApprovalDraftStatus.Ready)
             {
                 Printer.Print("Checking Approval Draft Status...");
                 

@@ -17,7 +17,7 @@ namespace MediaMarkup.Api.Models
 
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty(PropertyName = "status")]
-        public ApprovalDraftStatus Status { get; set; } = ApprovalDraftStatus.Draft;
+        public ApprovalDraftStatus Status { get; set; } = ApprovalDraftStatus.Ready;
         
         [JsonProperty(PropertyName = "error")]
         public string Error { get; set; }
@@ -40,7 +40,7 @@ namespace MediaMarkup.Api.Models
 
     public enum ApprovalDraftStatus
     {
-        Draft,
+        Ready,
         Processing,
         Failed,
         Published
